@@ -154,7 +154,8 @@
 
     /* ── TAPE ── */
     .tape {
-      background: var(--rosa); padding: 11px 0; overflow: hidden;
+      background: linear-gradient(90deg, #FF78BE, var(--rosa), #FF78BE);
+      padding: 11px 0; overflow: hidden;
     }
     .tape-track {
       display: flex; width: max-content;
@@ -368,7 +369,10 @@
       transition: background 0.3s;
     }
     .pcard:hover { background: rgba(247,245,242,0.08); }
-    .pcard.hot { background: var(--rosa); border-color: var(--rosa); }
+    .pcard.hot {
+      background: linear-gradient(160deg, #FF78BE 0%, var(--rosa) 50%, #FF78BE 100%);
+      border-color: var(--rosa);
+    }
     .pcard-icon { font-size: 30px; margin-bottom: 20px; display: block; }
     .pcard h3 {
       font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700;
@@ -1005,6 +1009,7 @@
 </script>
 </body>
 </html>
+
 
 
 
