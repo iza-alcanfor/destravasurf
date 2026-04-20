@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="only light">
   <title>Destrava Surf — Itacaré, BA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +12,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --gelo:  #F7F5F2;
-      --rosa:  #FF5FA0;
+      --rosa:  #FF6EB4;
+      --rosa-hover: #E85CA0;
       --fumo:  #2E2A26;
       --cinza: #7A7268;
       --areia: #EDE8E0;
@@ -22,6 +24,7 @@
       background: var(--gelo);
       color: var(--fumo);
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
     /* grain overlay */
     body::after {
@@ -62,7 +65,7 @@
       color: white !important;
       padding: 10px 24px; border-radius: 100px;
     }
-    .nav-cta:hover { background: #e04d8e !important; color: white !important; }
+    .nav-cta:hover { background: var(--rosa-hover) !important; color: white !important; }
     .nav-hamburger {
       display: none; flex-direction: column; gap: 5px;
       background: none; border: none; cursor: pointer; padding: 4px;
@@ -104,7 +107,6 @@
       content: ''; display: block;
       width: 36px; height: 1px; background: rgba(247,245,242,0.4);
     }
-    /* THE BIG TITLE */
     .hero-h1 {
       font-family: 'Unbounded', sans-serif;
       font-weight: 900;
@@ -136,11 +138,11 @@
     .btn-rosa {
       font-family: 'Space Mono', monospace;
       font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-      background: #FF5FA0; color: white;
+      background: var(--rosa); color: white;
       padding: 15px 34px; border-radius: 100px;
       text-decoration: none; transition: background 0.25s, transform 0.25s;
     }
-    .btn-rosa:hover { background: #e04d8e; transform: translateY(-2px); }
+    .btn-rosa:hover { background: var(--rosa-hover); transform: translateY(-2px); }
     .btn-ghost-w {
       font-family: 'Space Mono', monospace;
       font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
@@ -152,7 +154,7 @@
 
     /* ── TAPE ── */
     .tape {
-      background: #FF5FA0; padding: 11px 0; overflow: hidden;
+      background: var(--rosa); padding: 11px 0; overflow: hidden;
     }
     .tape-track {
       display: flex; width: max-content;
@@ -200,7 +202,7 @@
     }
     .sobre-img .img-tag {
       position: absolute; bottom: -16px; right: -16px;
-      background: #FF5FA0; color: white;
+      background: var(--rosa); color: white;
       font-family: 'Space Mono', monospace;
       font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
       padding: 10px 18px;
@@ -300,16 +302,6 @@
       font-family: 'Space Mono', monospace;
       font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cinza);
     }
-    /* 10-photo grid */
-    /* Gallery: 13 photos, 4 rows de 4 colunas — nenhuma sozinha
-       Row 1: [1] [2──wide──] [3]          = 1+2+1 = 4 cols
-       Row 2: [4──wide──] [5] [6]          = 2+1+1 = 4 cols
-       Row 3: [7] [8] [9──wide──]          = 1+1+2 = 4 cols
-       Row 4: [10] [11──wide──] [12] [13]  = 1+2+1 = wait, 4 items
-              [10] [11] [12──wide──] [13]  = 1+1+2 doesn't work for 4
-              melhor: [10──wide──] [11] [12──wide──] = 2+1+... nope
-              Solução: Row4: [10] [11] [12] [13] = 4 normais = perfeito!
-    */
     .galeria-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -328,7 +320,6 @@
       transition: transform 0.7s ease; filter: sepia(0.06) saturate(0.9);
     }
     .g-item:hover img { transform: scale(1.05); filter: sepia(0) saturate(1); }
-    /* placeholder when no image */
     .g-placeholder {
       width: 100%; height: 100%;
       display: flex; flex-direction: column;
@@ -377,7 +368,7 @@
       transition: background 0.3s;
     }
     .pcard:hover { background: rgba(247,245,242,0.08); }
-    .pcard.hot { background: #FF5FA0; border-color: #FF5FA0; }
+    .pcard.hot { background: var(--rosa); border-color: var(--rosa); }
     .pcard-icon { font-size: 30px; margin-bottom: 20px; display: block; }
     .pcard h3 {
       font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700;
@@ -444,7 +435,7 @@
       font-family: 'Space Mono', monospace; font-size: 9px;
       letter-spacing: 0.2em; text-transform: uppercase;
       color: rgba(247,245,242,0.5); text-decoration: none; white-space: nowrap;
-      border-bottom: 1px solid rgba(232,73,106,0.6); padding-bottom: 2px;
+      border-bottom: 1px solid rgba(255,110,180,0.6); padding-bottom: 2px;
       transition: color 0.2s, border-color 0.2s;
     }
     .desconto-strip a:hover { color: white; border-color: white; }
@@ -481,8 +472,8 @@
       font-size: 17px; line-height: 1.75; color: var(--cinza);
       font-weight: 300; font-style: italic; margin-bottom: 28px;
     }
-    .dep-text::before { content: '"'; color: var(--rosa); font-size: 36px; font-style: normal; line-height: 0; vertical-align: -14px; margin-right: 4px; }
-    .dep-text::after { content: '"'; color: var(--rosa); font-size: 36px; font-style: normal; line-height: 0; vertical-align: -14px; margin-left: 4px; }
+    .dep-text::before { content: '\201C'; color: var(--rosa); font-size: 36px; font-style: normal; line-height: 0; vertical-align: -14px; margin-right: 4px; }
+    .dep-text::after { content: '\201D'; color: var(--rosa); font-size: 36px; font-style: normal; line-height: 0; vertical-align: -14px; margin-left: 4px; }
     .dep-autor {
       display: flex; align-items: center; gap: 14px;
       border-top: 1px solid rgba(46,42,38,0.07); padding-top: 20px;
@@ -775,14 +766,13 @@
   </div>
 </section>
 
-<!-- GALERIA — 10 frames -->
+<!-- GALERIA — 13 frames -->
 <section id="galeria">
   <div class="galeria-header">
     <h2 class="section-h2" style="margin-bottom:0">A vida em <em>Itacaré</em></h2>
     <span class="galeria-meta">Galeria de fotos</span>
   </div>
   <div class="galeria-grid">
-    <!-- Linha 1: wide + normal + normal -->
     <div class="g-item wide">
       <img src="images/galeria1.jpg" alt="Surf em Itacaré" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>01</span><span>galeria1.jpg</span></div>'">
     </div>
@@ -792,7 +782,6 @@
     <div class="g-item">
       <img src="images/galeria3.jpg" alt="Aula" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>03</span><span>galeria3.jpg</span></div>'">
     </div>
-    <!-- Linha 2: tall + normal + normal + normal -->
     <div class="g-item tall">
       <img src="images/galeria4.jpg" alt="Mar" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>04</span><span>galeria4.jpg</span></div>'">
     </div>
@@ -805,7 +794,6 @@
     <div class="g-item">
       <img src="images/galeria7.jpg" alt="Equipe" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>07</span><span>galeria7.jpg</span></div>'">
     </div>
-    <!-- Linha 3: normal + wide + normal -->
     <div class="g-item">
       <img src="images/galeria8.jpg" alt="Praia" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>08</span><span>galeria8.jpg</span></div>'">
     </div>
@@ -988,7 +976,6 @@
 </footer>
 
 <script>
-  // Nav scroll behavior
   const nav = document.getElementById('nav');
   const logoImg = document.getElementById('nav-logo-img');
   const logoW = 'images/logo_white.png';
@@ -999,7 +986,6 @@
     logoImg.src = scrolled ? logoB : logoW;
   });
 
-  // Mobile menu
   function toggleMenu() {
     const ul = nav.querySelector('ul');
     const open = ul.style.display === 'flex';
@@ -1010,7 +996,6 @@
     }
   }
 
-  // Close menu on link click
   document.querySelectorAll('nav ul a').forEach(a => {
     a.addEventListener('click', () => {
       const ul = nav.querySelector('ul');
@@ -1020,5 +1005,6 @@
 </script>
 </body>
 </html>
+
 
 
