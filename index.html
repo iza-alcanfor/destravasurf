@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Destrava Surf — Itacaré, BA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gelo:  #F7F5F2;
+      --rosa:  #E8496A;
+      --fumo:  #2E2A26;
+      --cinza: #7A7268;
+      --areia: #EDE8E0;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      background: var(--gelo);
+      color: var(--fumo);
+      overflow-x: hidden;
+    }
+    /* grain overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 9999;
+      pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.055'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
+      mix-blend-mode: multiply;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 56px;
+      transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+    }
+    nav.scrolled {
+      background: rgba(247,245,242,0.94);
+      backdrop-filter: blur(12px);
+      padding: 14px 56px;
+      border-bottom: 1px solid rgba(46,42,38,0.08);
+    }
+    .nav-logo img { height: 40px; }
+    nav ul { list-style: none; display: flex; gap: 40px; align-items: center; }
+    nav ul a {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gelo); text-decoration: none; transition: color 0.2s;
+      opacity: 0.7;
+    }
+    nav.scrolled ul a { color: var(--fumo); }
+    nav ul a:hover { opacity: 1; color: var(--rosa) !important; }
+    .nav-cta {
+      opacity: 1 !important;
+      background: var(--rosa) !important;
+      color: white !important;
+      padding: 10px 24px; border-radius: 100px;
+    }
+    .nav-cta:hover { background: #c93055 !important; color: white !important; }
+    .nav-hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px;
+    }
+    .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--gelo); border-radius: 2px; transition: background 0.3s; }
+    nav.scrolled .nav-hamburger span { background: var(--fumo); }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100svh; position: relative;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('images/hero.jpg') center center / cover no-repeat;
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(46,42,38,0.18) 0%,
+        rgba(46,42,38,0.04) 45%,
+        rgba(46,42,38,0.62) 100%
+      );
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      padding: 0 56px 72px;
+    }
+    .hero-eyebrow {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(247,245,242,0.55);
+      margin-bottom: 18px;
+      display: flex; align-items: center; gap: 16px;
+    }
+    .hero-eyebrow::before {
+      content: ''; display: block;
+      width: 36px; height: 1px; background: rgba(247,245,242,0.4);
+    }
+    /* THE BIG TITLE */
+    .hero-h1 {
+      font-family: 'Unbounded', sans-serif;
+      font-weight: 900;
+      line-height: 0.88;
+      letter-spacing: -0.04em;
+      margin-bottom: 28px;
+      font-size: clamp(60px, 9.5vw, 128px);
+    }
+    .hero-h1 .row1 { display: block; color: var(--rosa); }
+    .hero-h1 .row2 {
+      display: block;
+      -webkit-text-stroke: 2.5px white;
+      color: transparent;
+    }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      font-size: clamp(18px, 2.2vw, 26px);
+      color: rgba(247,245,242,0.78);
+      margin-bottom: 44px;
+      line-height: 1.45;
+    }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-rosa {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      background: var(--rosa); color: white;
+      padding: 15px 34px; border-radius: 100px;
+      text-decoration: none; transition: background 0.25s, transform 0.25s;
+    }
+    .btn-rosa:hover { background: #c93055; transform: translateY(-2px); }
+    .btn-ghost-w {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      border: 1.5px solid rgba(247,245,242,0.55); color: var(--gelo);
+      padding: 15px 34px; border-radius: 100px;
+      text-decoration: none; transition: all 0.25s;
+    }
+    .btn-ghost-w:hover { border-color: white; background: rgba(247,245,242,0.1); }
+
+    /* ── TAPE ── */
+    .tape {
+      background: var(--rosa); padding: 11px 0; overflow: hidden;
+    }
+    .tape-track {
+      display: flex; width: max-content;
+      animation: tape 22s linear infinite;
+    }
+    .tape-track span {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: white; padding: 0 24px; white-space: nowrap; opacity: 0.9;
+    }
+    .tape-track span.sep { opacity: 0.4; padding: 0 4px; }
+    @keyframes tape { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── SHARED ── */
+    .kicker {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.3em; text-transform: uppercase;
+      color: var(--rosa); margin-bottom: 22px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .kicker::before { content: ''; width: 22px; height: 1px; background: var(--rosa); }
+    .section-h2 {
+      font-family: 'Unbounded', sans-serif;
+      font-size: clamp(30px, 3.5vw, 50px);
+      font-weight: 700; letter-spacing: -0.03em; line-height: 1.0;
+      margin-bottom: 24px;
+    }
+    .section-h2 em {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic; font-weight: 300;
+      color: var(--rosa); font-size: 1.15em; letter-spacing: -0.01em;
+    }
+
+    /* ── SOBRE ── */
+    #sobre {
+      padding: 120px 56px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .sobre-img {
+      position: relative; height: 560px;
+    }
+    .sobre-img img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      border-radius: 2px; filter: sepia(0.06) saturate(0.92);
+    }
+    .sobre-img .img-tag {
+      position: absolute; bottom: -16px; right: -16px;
+      background: var(--rosa); color: white;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+      padding: 10px 18px;
+    }
+    .sobre-txt p {
+      font-size: 18px; line-height: 1.8;
+      color: var(--cinza); font-weight: 300; margin-bottom: 18px;
+    }
+
+    /* ── EQUIPE ── */
+    #equipe {
+      background: var(--areia);
+      padding: 100px 56px;
+    }
+    .equipe-inner {
+      display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: center;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .equipe-foto {
+      position: relative;
+    }
+    .equipe-foto img {
+      width: 100%; aspect-ratio: 3/4; object-fit: cover;
+      display: block; border-radius: 2px;
+      filter: sepia(0.1) saturate(0.88);
+    }
+    .equipe-foto .nome-tag {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(46,42,38,0.85), transparent);
+      padding: 40px 24px 20px;
+      border-radius: 0 0 2px 2px;
+    }
+    .equipe-foto .nome-tag strong {
+      font-family: 'Unbounded', sans-serif;
+      font-size: 22px; font-weight: 900; letter-spacing: -0.03em;
+      color: white; display: block; margin-bottom: 4px;
+    }
+    .equipe-foto .nome-tag span {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(247,245,242,0.55);
+    }
+    .equipe-txt p {
+      font-size: 18px; line-height: 1.8;
+      color: var(--cinza); font-weight: 300; margin-bottom: 18px;
+    }
+    .equipe-pills {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px;
+    }
+    .pill {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+      border: 1px solid rgba(46,42,38,0.2);
+      color: var(--fumo); padding: 8px 16px; border-radius: 100px;
+    }
+
+    /* ── AULAS ── */
+    #aulas { padding: 100px 56px; }
+    .aulas-top {
+      display: flex; align-items: flex-end; gap: 60px;
+      margin-bottom: 60px; padding-bottom: 40px;
+      border-bottom: 1px solid rgba(46,42,38,0.1);
+    }
+    .aulas-top .section-h2 { flex: 1; margin-bottom: 0; }
+    .aulas-top p {
+      font-size: 16px; line-height: 1.7; color: var(--cinza);
+      max-width: 280px; font-weight: 300;
+    }
+    .aulas-foto {
+      width: 100%; height: 440px; object-fit: cover;
+      border-radius: 2px; margin-bottom: 52px;
+      filter: sepia(0.08) saturate(0.9); display: block;
+    }
+    .aulas-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+    }
+    .aula-item { padding-top: 20px; border-top: 1px solid rgba(46,42,38,0.1); }
+    .aula-n {
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      letter-spacing: 0.2em; color: var(--rosa); margin-bottom: 14px;
+    }
+    .aula-item h3 {
+      font-family: 'Unbounded', sans-serif; font-size: 14px;
+      font-weight: 700; letter-spacing: -0.02em; line-height: 1.25;
+      margin-bottom: 10px;
+    }
+    .aula-item p { font-size: 15px; line-height: 1.7; color: var(--cinza); font-weight: 300; }
+
+    /* ── GALERIA ── */
+    #galeria { padding: 0 56px 100px; }
+    .galeria-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 28px; padding-bottom: 16px;
+      border-bottom: 1px solid rgba(46,42,38,0.1);
+    }
+    .galeria-meta {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cinza);
+    }
+    /* 10-photo grid */
+    .galeria-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 240px;
+      gap: 6px;
+    }
+    .g-item {
+      overflow: hidden; border-radius: 2px;
+      background: var(--areia);
+      position: relative;
+    }
+    .g-item.wide { grid-column: span 2; }
+    .g-item.tall { grid-row: span 2; }
+    .g-item img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform 0.7s ease; filter: sepia(0.06) saturate(0.9);
+    }
+    .g-item:hover img { transform: scale(1.05); filter: sepia(0) saturate(1); }
+    /* placeholder when no image */
+    .g-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 10px;
+      background: var(--areia);
+    }
+    .g-placeholder span {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(46,42,38,0.25);
+    }
+    .g-placeholder .ph-n {
+      font-family: 'Unbounded', sans-serif; font-size: 28px; font-weight: 900;
+      color: rgba(46,42,38,0.1); letter-spacing: -0.04em;
+    }
+
+    /* ── PREÇOS ── */
+    #precos {
+      background: var(--fumo);
+      padding: 100px 56px; position: relative; overflow: hidden;
+    }
+    #precos::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,0.035) 1px, transparent 1px);
+      background-size: 22px 22px; pointer-events: none;
+    }
+    .precos-top {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      gap: 40px; margin-bottom: 72px;
+    }
+    .precos-top .section-h2 { color: var(--gelo); margin-bottom: 0; }
+    .precos-top .section-h2 em { color: var(--rosa); }
+    .precos-top p {
+      font-size: 16px; line-height: 1.7; color: rgba(247,245,242,0.38);
+      max-width: 260px; font-weight: 300; text-align: right;
+    }
+    .cards-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 18px; max-width: 840px; margin: 0 auto 36px;
+    }
+    .pcard {
+      background: rgba(247,245,242,0.05);
+      border: 1px solid rgba(247,245,242,0.1);
+      border-radius: 4px; padding: 44px 38px;
+      transition: background 0.3s;
+    }
+    .pcard:hover { background: rgba(247,245,242,0.08); }
+    .pcard.hot { background: var(--rosa); border-color: var(--rosa); }
+    .pcard-icon { font-size: 30px; margin-bottom: 20px; display: block; }
+    .pcard h3 {
+      font-family: 'Unbounded', sans-serif; font-size: 16px; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--gelo); margin-bottom: 8px;
+    }
+    .pcard .sub {
+      font-size: 14px; line-height: 1.65; color: rgba(247,245,242,0.4);
+      font-weight: 300; margin-bottom: 28px;
+    }
+    .pcard.hot .sub { color: rgba(255,255,255,0.7); }
+    .price-row { display: flex; align-items: baseline; gap: 3px; margin-bottom: 28px; }
+    .price-curr { font-family: 'Space Mono', monospace; font-size: 12px; color: rgba(247,245,242,0.45); }
+    .price-num {
+      font-family: 'Unbounded', sans-serif; font-size: 52px; font-weight: 900;
+      letter-spacing: -0.04em; color: var(--gelo); line-height: 1;
+    }
+    .price-unit {
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(247,245,242,0.3); margin-left: 6px;
+    }
+    .pcard hr { border: none; border-top: 1px solid rgba(247,245,242,0.1); margin-bottom: 20px; }
+    .pcard.hot hr { border-color: rgba(255,255,255,0.25); }
+    .feat-list { list-style: none; margin-bottom: 32px; }
+    .feat-list li {
+      font-size: 14px; color: rgba(247,245,242,0.5);
+      padding: 5px 0; display: flex; align-items: center; gap: 10px; font-weight: 300;
+    }
+    .pcard.hot .feat-list li { color: rgba(255,255,255,0.8); }
+    .feat-list li::before {
+      content: ''; width: 4px; height: 4px; border-radius: 50%;
+      background: var(--rosa); flex-shrink: 0;
+    }
+    .pcard.hot .feat-list li::before { background: white; }
+    .btn-pcard {
+      display: block; text-align: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 13px; border-radius: 100px; text-decoration: none;
+      border: 1px solid rgba(247,245,242,0.2); color: var(--gelo);
+      transition: all 0.25s;
+    }
+    .btn-pcard:hover { border-color: var(--gelo); background: rgba(247,245,242,0.08); }
+    .pcard.hot .btn-pcard { background: white; color: var(--rosa); border-color: white; }
+    .pcard.hot .btn-pcard:hover { background: var(--gelo); }
+
+    .desconto-strip {
+      max-width: 840px; margin: 0 auto;
+      border: 1px dashed rgba(247,245,242,0.18); border-radius: 4px;
+      padding: 26px 36px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .desconto-strip .d-icon { font-size: 26px; flex-shrink: 0; }
+    .desconto-strip p {
+      font-size: 15px; line-height: 1.6;
+      color: rgba(247,245,242,0.45); font-weight: 300; flex: 1;
+    }
+    .desconto-strip p strong {
+      font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700;
+      color: var(--gelo); letter-spacing: -0.02em;
+      display: block; margin-bottom: 3px;
+    }
+    .desconto-strip a {
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(247,245,242,0.5); text-decoration: none; white-space: nowrap;
+      border-bottom: 1px solid rgba(232,73,106,0.6); padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .desconto-strip a:hover { color: white; border-color: white; }
+
+    /* ── DEPOIMENTOS ── */
+    #depoimentos {
+      padding: 100px 56px;
+      background: var(--gelo);
+    }
+    .dep-header {
+      display: flex; align-items: flex-end; justify-content: space-between;
+      margin-bottom: 56px; gap: 40px;
+    }
+    .dep-header .section-h2 { margin-bottom: 0; }
+    .dep-header .google-tag {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--cinza);
+    }
+    .dep-header .stars { color: #F9B233; font-size: 14px; letter-spacing: 2px; }
+    .dep-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+    }
+    .dep-card {
+      background: white; border-radius: 4px;
+      padding: 36px 32px;
+      border: 1px solid rgba(46,42,38,0.07);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .dep-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(46,42,38,0.08); }
+    .dep-stars { color: #F9B233; font-size: 14px; letter-spacing: 2px; margin-bottom: 20px; }
+    .dep-text {
+      font-size: 17px; line-height: 1.75; color: var(--cinza);
+      font-weight: 300; font-style: italic; margin-bottom: 28px;
+    }
+    .dep-text::before { content: '"'; color: var(--rosa); font-size: 36px; font-style: normal; line-height: 0; vertical-align: -14px; margin-right: 4px; }
+    .dep-text::after { content: '"'; color: var(--rosa); font-size: 36px; font-style: normal; line-height: 0; vertical-align: -14px; margin-left: 4px; }
+    .dep-autor {
+      display: flex; align-items: center; gap: 14px;
+      border-top: 1px solid rgba(46,42,38,0.07); padding-top: 20px;
+    }
+    .dep-avatar {
+      width: 40px; height: 40px; border-radius: 50%;
+      background: var(--areia); display: flex; align-items: center; justify-content: center;
+      font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 900;
+      color: var(--cinza); flex-shrink: 0;
+    }
+    .dep-nome {
+      font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700;
+      letter-spacing: -0.02em; color: var(--fumo);
+    }
+    .dep-local {
+      font-family: 'Space Mono', monospace; font-size: 8px;
+      letter-spacing: 0.18em; text-transform: uppercase; color: var(--cinza);
+      margin-top: 3px;
+    }
+    .dep-cta {
+      text-align: center; margin-top: 48px;
+      font-size: 15px; color: var(--cinza); font-weight: 300;
+    }
+    .dep-cta a {
+      color: var(--rosa); text-decoration: underline; text-underline-offset: 3px;
+    }
+
+    /* ── ITACARÉ ── */
+    #itacare {
+      padding: 100px 56px; background: var(--areia);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .itacare-txt p {
+      font-size: 17px; line-height: 1.8; color: var(--cinza);
+      font-weight: 300; margin-bottom: 16px; max-width: 440px;
+    }
+    .stats-row {
+      display: flex; gap: 48px; margin-top: 48px;
+      padding-top: 36px; border-top: 1px solid rgba(46,42,38,0.1);
+      flex-wrap: wrap;
+    }
+    .stat-n {
+      font-family: 'Unbounded', sans-serif; font-size: 36px; font-weight: 900;
+      letter-spacing: -0.04em; color: var(--fumo); line-height: 1;
+    }
+    .stat-n em { color: var(--rosa); font-style: normal; font-size: 0.7em; }
+    .stat-lbl {
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--cinza); margin-top: 6px;
+    }
+    .itacare-img {
+      width: 100%; height: 520px; object-fit: cover;
+      display: block; border-radius: 2px; filter: sepia(0.06) saturate(0.92);
+    }
+
+    /* ── CONTATO ── */
+    #contato {
+      padding: 100px 56px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .contato-txt p {
+      font-size: 17px; line-height: 1.8; color: var(--cinza);
+      font-weight: 300; max-width: 380px; margin-bottom: 40px;
+    }
+    .wpp-btn {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: #25D366; color: white; text-decoration: none;
+      padding: 17px 34px; border-radius: 100px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      transition: background 0.25s, transform 0.25s;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.22);
+    }
+    .wpp-btn:hover { background: #1db954; transform: translateY(-2px); }
+    .wpp-btn svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
+    .infos { display: flex; flex-direction: column; gap: 14px; }
+    .info-row {
+      display: flex; gap: 20px; align-items: flex-start;
+      padding: 18px 22px; border-radius: 4px;
+      background: var(--areia); border: 1px solid rgba(46,42,38,0.06);
+    }
+    .info-lbl {
+      font-family: 'Space Mono', monospace; font-size: 8px;
+      letter-spacing: 0.25em; text-transform: uppercase;
+      color: var(--rosa); margin-bottom: 5px;
+    }
+    .info-val {
+      font-family: 'Unbounded', sans-serif; font-size: 14px;
+      font-weight: 700; letter-spacing: -0.02em; color: var(--fumo);
+    }
+    .info-sub { font-size: 13px; color: var(--cinza); margin-top: 2px; font-weight: 300; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--fumo);
+      padding: 56px 56px 36px;
+      display: flex; flex-direction: column; align-items: center; gap: 28px;
+      border-top: 3px solid var(--rosa);
+    }
+    footer img { height: 36px; filter: invert(1) brightness(2); opacity: 0.45; }
+    .foot-links { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; list-style: none; }
+    .foot-links a {
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: rgba(247,245,242,0.22); text-decoration: none; transition: color 0.2s;
+    }
+    .foot-links a:hover { color: var(--rosa); }
+    footer small {
+      font-family: 'Space Mono', monospace; font-size: 9px;
+      letter-spacing: 0.1em; color: rgba(247,245,242,0.15);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 960px) {
+      nav { padding: 16px 24px; }
+      nav ul { display: none; }
+      .nav-hamburger { display: flex; }
+      #hero .hero-content { padding: 0 28px 60px; }
+      #sobre { grid-template-columns: 1fr; padding: 80px 28px; gap: 48px; }
+      .sobre-img { height: 380px; }
+      #equipe { padding: 80px 28px; }
+      .equipe-inner { grid-template-columns: 1fr; gap: 48px; }
+      .equipe-foto img { aspect-ratio: 4/3; }
+      #aulas { padding: 80px 28px; }
+      .aulas-top { flex-direction: column; gap: 20px; }
+      .aulas-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+      .aulas-foto { height: 320px; }
+      #galeria { padding: 0 28px 80px; }
+      .galeria-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 200px;
+      }
+      .g-item.wide { grid-column: span 1; }
+      #precos { padding: 80px 28px; }
+      .precos-top { flex-direction: column; align-items: flex-start; }
+      .precos-top p { text-align: left; max-width: 100%; }
+      .cards-row { grid-template-columns: 1fr; max-width: 420px; }
+      .desconto-strip { flex-direction: column; }
+      #depoimentos { padding: 80px 28px; }
+      .dep-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .dep-grid { grid-template-columns: 1fr; }
+      #itacare { grid-template-columns: 1fr; padding: 80px 28px; gap: 52px; }
+      .itacare-img { height: 320px; }
+      #contato { grid-template-columns: 1fr; padding: 80px 28px; gap: 52px; }
+      footer { padding: 44px 24px 32px; }
+    }
+    @media (max-width: 560px) {
+      .aulas-grid { grid-template-columns: 1fr; }
+      .galeria-grid { grid-template-columns: 1fr; grid-auto-rows: 260px; }
+      .g-item.tall { grid-row: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">
+    <img id="nav-logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/HSuDAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAZH0lEQVR4nO3YwQ3AIBDAsNL9dz6mQEjEniDvrJmZDwAAAHjafzsAAAAAOM8AAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAI24l0L/FIiuQwAAAAASUVORK5CYII=" alt="Destrava Surf">
+  </a>
+  <ul>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#equipe">Equipe</a></li>
+    <li><a href="#aulas">Aulas</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#precos">Preços</a></li>
+    <li><a href="#contato" class="nav-cta">Reservar</a></li>
+  </ul>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Itacaré · Bahia · Brasil</p>
+    <h1 class="hero-h1">
+      <span class="row1">DESTRAVA</span>
+      <span class="row2">SURF</span>
+    </h1>
+    <p class="hero-sub">Aprenda de verdade.<br>Com quem entende o mar.</p>
+    <div class="hero-actions">
+      <a href="#precos" class="btn-rosa">Ver preços</a>
+      <a href="#sobre" class="btn-ghost-w">Conhecer</a>
+    </div>
+  </div>
+</section>
+
+<!-- TAPE -->
+<div class="tape">
+  <div class="tape-track">
+    <span>Aula de Surf</span><span class="sep"> · </span>
+    <span>Itacaré, BA</span><span class="sep"> · </span>
+    <span>Iniciante ao Avançado</span><span class="sep"> · </span>
+    <span>Vídeo Análise</span><span class="sep"> · </span>
+    <span>Instrutor Profissional</span><span class="sep"> · </span>
+    <span>Sul da Bahia</span><span class="sep"> · </span>
+    <span>Destrava Surf</span><span class="sep"> · </span>
+    <span>Aula de Surf</span><span class="sep"> · </span>
+    <span>Itacaré, BA</span><span class="sep"> · </span>
+    <span>Iniciante ao Avançado</span><span class="sep"> · </span>
+    <span>Vídeo Análise</span><span class="sep"> · </span>
+    <span>Instrutor Profissional</span><span class="sep"> · </span>
+    <span>Sul da Bahia</span><span class="sep"> · </span>
+    <span>Destrava Surf</span><span class="sep"> · </span>
+  </div>
+</div>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="sobre-img">
+    <img src="images/sobre.jpg" alt="Destrava Surf em Itacaré">
+    <div class="img-tag">Itacaré · BA</div>
+  </div>
+  <div class="sobre-txt">
+    <div class="kicker">Sobre a Destrava</div>
+    <h2 class="section-h2">Mais que uma aula.<br><em>Uma virada.</em></h2>
+    <p>A Destrava foi criada pra quem sempre quis surfar mas ficou na dúvida de onde começar. Nossa missão é simples: fazer você pegar uma onda de verdade — e entender que foi só o começo.</p>
+    <p>Grupos pequenos, método claro, atenção real dentro e fora da água. Em Itacaré, uma das melhores praias do Brasil para aprender.</p>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<section id="equipe">
+  <div class="equipe-inner">
+    <div class="equipe-foto">
+      <img src="images/salomao.jpg" alt="Salomão — Instrutor">
+      <div class="nome-tag">
+        <strong>Salomão</strong>
+        <span>Instrutor de Surf · Itacaré</span>
+      </div>
+    </div>
+    <div class="equipe-txt">
+      <div class="kicker">A equipe</div>
+      <h2 class="section-h2">Aprenda com<br><em>quem vive o mar.</em></h2>
+      <p>Salomão cresceu em Itacaré rodeado de surf e floresta. Passou anos aperfeiçoando não só sua técnica nas ondas, mas a arte de ensinar — com paciência, clareza e muita paixão pelo esporte.</p>
+      <p>Com ele, cada aula tem feedback real. Você entende o que está fazendo certo, o que pode melhorar e por quê. Sem blá blá blá, só resultado dentro da água.</p>
+      <div class="equipe-pills">
+        <span class="pill">Instrutor certificado</span>
+        <span class="pill">Nativo de Itacaré</span>
+        <span class="pill">Todos os níveis</span>
+        <span class="pill">Análise de vídeo</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AULAS -->
+<section id="aulas">
+  <div class="aulas-top">
+    <h2 class="section-h2">O que você<br><em>aprende</em><br>com a gente</h2>
+    <p>Do equilíbrio na prancha à leitura das ondas — ensinamos o que realmente importa pra você evoluir de verdade.</p>
+  </div>
+  <img class="aulas-foto" src="images/aulas.jpg" alt="Warm-up na areia — Destrava Surf">
+  <div class="aulas-grid">
+    <div class="aula-item">
+      <div class="aula-n">01 ——</div>
+      <h3>Posição & Remada</h3>
+      <p>A base de tudo. Posição correta na prancha e técnica de remada eficiente pra pegar as ondas.</p>
+    </div>
+    <div class="aula-item">
+      <div class="aula-n">02 ——</div>
+      <h3>O Pop-Up</h3>
+      <p>Levantar rápido, fluido e no tempo certo. Praticado em terra antes de entrar na água.</p>
+    </div>
+    <div class="aula-item">
+      <div class="aula-n">03 ——</div>
+      <h3>Leitura das Ondas</h3>
+      <p>Entender o mar é metade do surf. Você aprende a ler o swell e se posicionar no lineup.</p>
+    </div>
+    <div class="aula-item">
+      <div class="aula-n">04 ——</div>
+      <h3>Manobras & Evolução</h3>
+      <p>Para quem já ficou em pé: primeiras viradas, trimming e os cortes iniciais com método.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALERIA — 10 frames -->
+<section id="galeria">
+  <div class="galeria-header">
+    <h2 class="section-h2" style="margin-bottom:0">A vida em <em>Itacaré</em></h2>
+    <span class="galeria-meta">Galeria de fotos</span>
+  </div>
+  <div class="galeria-grid">
+    <!-- Linha 1: wide + normal + normal -->
+    <div class="g-item wide">
+      <img src="images/galeria1.jpg" alt="Surf em Itacaré" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>01</span><span>galeria1.jpg</span></div>'">
+    </div>
+    <div class="g-item">
+      <img src="images/galeria2.jpg" alt="Praia" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>02</span><span>galeria2.jpg</span></div>'">
+    </div>
+    <div class="g-item">
+      <img src="images/galeria3.jpg" alt="Aula" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>03</span><span>galeria3.jpg</span></div>'">
+    </div>
+    <!-- Linha 2: tall + normal + normal + normal -->
+    <div class="g-item tall">
+      <img src="images/galeria4.jpg" alt="Mar" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>04</span><span>galeria4.jpg</span></div>'">
+    </div>
+    <div class="g-item">
+      <img src="images/galeria5.jpg" alt="Surf" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>05</span><span>galeria5.jpg</span></div>'">
+    </div>
+    <div class="g-item">
+      <img src="images/galeria6.jpg" alt="Ondas" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>06</span><span>galeria6.jpg</span></div>'">
+    </div>
+    <div class="g-item">
+      <img src="images/galeria7.jpg" alt="Equipe" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>07</span><span>galeria7.jpg</span></div>'">
+    </div>
+    <!-- Linha 3: normal + wide + normal -->
+    <div class="g-item">
+      <img src="images/galeria8.jpg" alt="Praia" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>08</span><span>galeria8.jpg</span></div>'">
+    </div>
+    <div class="g-item wide">
+      <img src="images/galeria9.jpg" alt="Itacaré" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>09</span><span>galeria9.jpg</span></div>'">
+    </div>
+    <div class="g-item">
+      <img src="images/galeria10.jpg" alt="Surf" onerror="this.parentElement.innerHTML='<div class=g-placeholder><span class=ph-n>10</span><span>galeria10.jpg</span></div>'">
+    </div>
+  </div>
+</section>
+
+<!-- PREÇOS -->
+<section id="precos">
+  <div class="precos-top">
+    <h2 class="section-h2">Simples,<br><em>honesto.</em></h2>
+    <p>Dois valores, zero enrolação. Tudo negociado pelo WhatsApp — sem formulário, sem complicação.</p>
+  </div>
+  <div class="cards-row">
+    <div class="pcard">
+      <span class="pcard-icon">🏄</span>
+      <h3>Aula de Surf</h3>
+      <p class="sub">Aula com Salomão na praia. Warm-up, técnica e feedback dentro e fora da água.</p>
+      <div class="price-row">
+        <span class="price-curr">R$</span>
+        <span class="price-num">200</span>
+        <span class="price-unit">/ aula</span>
+      </div>
+      <hr>
+      <ul class="feat-list">
+        <li>Instrutor profissional</li>
+        <li>Todos os níveis</li>
+        <li>Equipamento incluso</li>
+        <li>Warm-up na areia</li>
+      </ul>
+      <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20de%20surf%20com%20a%20Destrava." target="_blank" class="btn-pcard">Marcar aula →</a>
+    </div>
+    <div class="pcard hot">
+      <span class="pcard-icon">🎥</span>
+      <h3>Aula + Vídeo Análise</h3>
+      <p class="sub">Com filmagem da sessão e análise técnica pós-aula. Você vê exatamente onde evoluir.</p>
+      <div class="price-row">
+        <span class="price-curr">R$</span>
+        <span class="price-num">250</span>
+        <span class="price-unit">/ aula</span>
+      </div>
+      <hr>
+      <ul class="feat-list">
+        <li>Tudo da aula padrão</li>
+        <li>Filmagem da sessão</li>
+        <li>Análise técnica pós-aula</li>
+        <li>Feedback visual do seu surf</li>
+      </ul>
+      <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20com%20análise%20de%20vídeo%20na%20Destrava." target="_blank" class="btn-pcard">Quero esse →</a>
+    </div>
+  </div>
+  <div class="desconto-strip">
+    <span class="d-icon">🤙</span>
+    <p>
+      <strong>Pacote a partir de 3 aulas? Tem desconto.</strong>
+      Pra quem fica alguns dias em Itacaré, montamos um pacote especial. Fala com a gente.
+    </p>
+    <a href="https://wa.me/5573998592297?text=Olá!%20Tenho%20interesse%20em%20um%20pacote%20de%20aulas%20na%20Destrava." target="_blank">Perguntar →</a>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="dep-header">
+    <h2 class="section-h2" style="margin-bottom:0">O que dizem<br><em>nossos alunos</em></h2>
+    <div class="google-tag">
+      <span class="stars">★★★★★</span>
+      5.0 · Google Reviews
+    </div>
+  </div>
+  <div class="dep-grid">
+    <div class="dep-card">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">Melhor experiência de surf da minha vida. Salomão é incrível — paciente, técnico e cheio de energia. Em dois dias já estava pegando ondas sozinho!</p>
+      <div class="dep-autor">
+        <div class="dep-avatar">AM</div>
+        <div>
+          <div class="dep-nome">Ana M.</div>
+          <div class="dep-local">São Paulo, SP</div>
+        </div>
+      </div>
+    </div>
+    <div class="dep-card">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">Nunca tinha surfado na vida. Em três dias com o Salomão consegui me levantar na prancha e curtir o mar de Itacaré de um jeito completamente diferente.</p>
+      <div class="dep-autor">
+        <div class="dep-avatar">RP</div>
+        <div>
+          <div class="dep-nome">Rafael P.</div>
+          <div class="dep-local">Belo Horizonte, MG</div>
+        </div>
+      </div>
+    </div>
+    <div class="dep-card">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text">A vídeo análise foi um diferencial enorme. Nunca tinha visto meu próprio surf de fora — entendi exatamente o que corrigir e evoluí muito mais rápido.</p>
+      <div class="dep-autor">
+        <div class="dep-avatar">CL</div>
+        <div>
+          <div class="dep-nome">Carla L.</div>
+          <div class="dep-local">Rio de Janeiro, RJ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="dep-cta">Quer ver mais avaliações? <a href="https://g.page/r/destravasurf" target="_blank">Acesse nosso perfil no Google →</a></p>
+</section>
+
+<!-- ITACARÉ -->
+<section id="itacare">
+  <div class="itacare-txt">
+    <div class="kicker">O destino</div>
+    <h2 class="section-h2">Por que Itacaré<br><em>é diferente</em></h2>
+    <p>No sul da Bahia, Itacaré combina ondas consistentes, temperatura ideal o ano inteiro e uma natureza que você não encontra em nenhum outro lugar.</p>
+    <p>Praias de fundo de areia, floresta Atlântica chegando até a beira do mar. Aqui o surf é uma experiência completa.</p>
+    <div class="stats-row">
+      <div><div class="stat-n">27<em>°C</em></div><div class="stat-lbl">Mar o ano todo</div></div>
+      <div><div class="stat-n">12<em>+</em></div><div class="stat-lbl">Praias de surf</div></div>
+      <div><div class="stat-n">365</div><div class="stat-lbl">Dias de ondas</div></div>
+    </div>
+  </div>
+  <img class="itacare-img" src="images/itacare.jpg" alt="Itacaré, Bahia">
+</section>
+
+<!-- CONTATO -->
+<section id="contato">
+  <div class="contato-txt">
+    <div class="kicker">Vamos surfar?</div>
+    <h2 class="section-h2">Pronto pra<br><em>destravar?</em></h2>
+    <p>Manda uma mensagem no WhatsApp — respondemos rápido e encontramos o melhor dia pra sua aula.</p>
+    <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20de%20surf%20com%20a%20Destrava%20em%20Itacaré." target="_blank" class="wpp-btn">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12c0 1.89.525 3.657 1.436 5.168L2 22l4.932-1.416A9.955 9.955 0 0012.004 22C17.523 22 22 17.523 22 12S17.523 2 12.004 2zm0 18.153a8.13 8.13 0 01-4.141-1.131l-.296-.177-3.073.882.847-3.175-.196-.31A8.153 8.153 0 1112.004 20.153z"/></svg>
+      Falar no WhatsApp
+    </a>
+  </div>
+  <div class="infos">
+    <div class="info-row">
+      <div><div class="info-lbl">WhatsApp</div><div class="info-val">+55 73 99859-2297</div><div class="info-sub">Respondemos em até 2h</div></div>
+    </div>
+    <div class="info-row">
+      <div><div class="info-lbl">Localização</div><div class="info-val">Itacaré, Bahia</div><div class="info-sub">Sul da Bahia — Brasil</div></div>
+    </div>
+    <div class="info-row">
+      <div><div class="info-lbl">Preços</div><div class="info-val">R$ 200 — R$ 250 / aula</div><div class="info-sub">Desconto a partir de 3 aulas</div></div>
+    </div>
+    <div class="info-row">
+      <div><div class="info-lbl">Nível</div><div class="info-val">Todos bem-vindos</div><div class="info-sub">Do iniciante ao intermediário</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <img src="images/logo_white.png" alt="Destrava Surf">
+  <ul class="foot-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#equipe">Equipe</a></li>
+    <li><a href="#aulas">Aulas</a></li>
+    <li><a href="#precos">Preços</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#itacare">Itacaré</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+  <small>© 2025 Destrava Surf · destravasurf.com.br · Itacaré, Bahia, Brasil</small>
+</footer>
+
+<script>
+  // Nav scroll behavior
+  const nav = document.getElementById('nav');
+  const logoImg = document.getElementById('nav-logo-img');
+  const logoW = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/HSuDAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAZH0lEQVR4nO3YwQ3AIBDAsNL9dz6mQEjEniDvrJmZDwAAAHjafzsAAAAAOM8AAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAI24l0L/FIiuQwAAAAASUVORK5CYII=';
+  const logoB = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAYAAAB/HSuDAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAZH0lEQVR4nO3YwQ3AIBDAsKP77wxToErEniDvrJnZAwAAADzt+zsAAAAAuM8AAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIMAAAAAAgwAAAAACDAAAAAAIAAAwAAAAACDAAAAAAIMAAAAAAgwAAAAACAAAMAAAAAAgwAAAAACDAAAAAAIMAAAAAAgAADAAAAAAIOvj4I/2wycJYAAAAASUVORK5CYII=';
+  window.addEventListener('scroll', () => {
+    const scrolled = window.scrollY > 60;
+    nav.classList.toggle('scrolled', scrolled);
+    logoImg.src = scrolled ? logoB : logoW;
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    const ul = nav.querySelector('ul');
+    const open = ul.style.display === 'flex';
+    ul.style.display = open ? 'none' : 'flex';
+    if (!open) {
+      ul.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(247,245,242,0.97);backdrop-filter:blur(12px);padding:24px 28px;gap:16px;border-bottom:1px solid rgba(46,42,38,0.1);';
+      ul.querySelectorAll('a').forEach(a => a.style.color = '#2E2A26');
+    }
+  }
+
+  // Close menu on link click
+  document.querySelectorAll('nav ul a').forEach(a => {
+    a.addEventListener('click', () => {
+      const ul = nav.querySelector('ul');
+      ul.style.display = '';
+    });
+  });
+</script>
+</body>
+</html>
