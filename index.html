@@ -32,7 +32,7 @@
       background-size: 200px 200px;
       mix-blend-mode: multiply;
     }
- 
+
     /* ── NAV ── */
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 500;
@@ -69,7 +69,7 @@
     }
     .nav-hamburger span { display: block; width: 22px; height: 1.5px; background: var(--gelo); border-radius: 2px; transition: background 0.3s; }
     nav.scrolled .nav-hamburger span { background: var(--fumo); }
- 
+
     /* ── HERO ── */
     #hero {
       min-height: 100svh; position: relative;
@@ -118,11 +118,11 @@
       display: block;
       font-family: 'Barlow Condensed', sans-serif;
       font-weight: 900;
-      font-size: clamp(90px, 14vw, 190px);
+      font-size: clamp(80px, 11.5vw, 152px);
       -webkit-text-stroke: 2.5px white;
       color: transparent;
-      letter-spacing: 0.02em;
-      line-height: 0.85;
+      letter-spacing: 0.06em;
+      line-height: 0.88;
     }
     .hero-sub {
       font-family: 'Cormorant Garamond', serif;
@@ -149,7 +149,7 @@
       text-decoration: none; transition: all 0.25s;
     }
     .btn-ghost-w:hover { border-color: white; background: rgba(247,245,242,0.1); }
- 
+
     /* ── TAPE ── */
     .tape {
       background: var(--rosa); padding: 11px 0; overflow: hidden;
@@ -165,7 +165,7 @@
     }
     .tape-track span.sep { opacity: 0.4; padding: 0 4px; }
     @keyframes tape { from { transform: translateX(0); } to { transform: translateX(-50%); } }
- 
+
     /* ── SHARED ── */
     .kicker {
       font-family: 'Space Mono', monospace;
@@ -185,7 +185,7 @@
       font-style: italic; font-weight: 300;
       color: var(--rosa); font-size: 1.15em; letter-spacing: -0.01em;
     }
- 
+
     /* ── SOBRE ── */
     #sobre {
       padding: 120px 56px;
@@ -209,7 +209,7 @@
       font-size: 18px; line-height: 1.8;
       color: var(--cinza); font-weight: 300; margin-bottom: 18px;
     }
- 
+
     /* ── EQUIPE ── */
     #equipe {
       background: var(--areia);
@@ -256,7 +256,7 @@
       border: 1px solid rgba(46,42,38,0.2);
       color: var(--fumo); padding: 8px 16px; border-radius: 100px;
     }
- 
+
     /* ── AULAS ── */
     #aulas { padding: 100px 56px; }
     .aulas-top {
@@ -288,7 +288,7 @@
       margin-bottom: 10px;
     }
     .aula-item p { font-size: 15px; line-height: 1.7; color: var(--cinza); font-weight: 300; }
- 
+
     /* ── GALERIA ── */
     #galeria { padding: 0 56px 100px; }
     .galeria-header {
@@ -344,7 +344,7 @@
       font-family: 'Unbounded', sans-serif; font-size: 28px; font-weight: 900;
       color: rgba(46,42,38,0.1); letter-spacing: -0.04em;
     }
- 
+
     /* ── PREÇOS ── */
     #precos {
       background: var(--fumo);
@@ -423,7 +423,7 @@
     .btn-pcard:hover { border-color: var(--gelo); background: rgba(247,245,242,0.08); }
     .pcard.hot .btn-pcard { background: white; color: var(--rosa); border-color: white; }
     .pcard.hot .btn-pcard:hover { background: var(--gelo); }
- 
+
     .desconto-strip {
       max-width: 840px; margin: 0 auto;
       border: 1px dashed rgba(247,245,242,0.18); border-radius: 4px;
@@ -448,7 +448,7 @@
       transition: color 0.2s, border-color 0.2s;
     }
     .desconto-strip a:hover { color: white; border-color: white; }
- 
+
     /* ── DEPOIMENTOS ── */
     #depoimentos {
       padding: 100px 56px;
@@ -509,7 +509,7 @@
     .dep-cta a {
       color: var(--rosa); text-decoration: underline; text-underline-offset: 3px;
     }
- 
+
     /* ── ITACARÉ ── */
     #itacare {
       padding: 100px 56px; background: var(--areia);
@@ -537,7 +537,7 @@
       width: 100%; height: 520px; object-fit: cover;
       display: block; border-radius: 2px; filter: sepia(0.06) saturate(0.92);
     }
- 
+
     /* ── CONTATO ── */
     #contato {
       padding: 100px 56px;
@@ -574,7 +574,7 @@
       font-weight: 700; letter-spacing: -0.02em; color: var(--fumo);
     }
     .info-sub { font-size: 13px; color: var(--cinza); margin-top: 2px; font-weight: 300; }
- 
+
     /* ── FOOTER ── */
     footer {
       background: var(--fumo);
@@ -594,53 +594,62 @@
       font-family: 'Space Mono', monospace; font-size: 9px;
       letter-spacing: 0.1em; color: rgba(247,245,242,0.15);
     }
- 
+
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
-      nav { padding: 16px 24px; }
+      nav { padding: 14px 24px; background: rgba(247,245,242,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(46,42,38,0.08); }
+      nav ul a { color: var(--fumo); }
+      .nav-hamburger span { background: var(--fumo); }
+      .nav-logo img { filter: brightness(0) !important; }
       nav ul { display: none; }
       .nav-hamburger { display: flex; }
-      #hero .hero-content { padding: 0 28px 60px; }
-      #sobre { grid-template-columns: 1fr; padding: 80px 28px; gap: 48px; }
-      .sobre-img { height: 380px; }
-      #equipe { padding: 80px 28px; }
-      .equipe-inner { grid-template-columns: 1fr; gap: 48px; }
+      #hero .hero-content { padding: 0 24px 56px; }
+      .hero-h1 { font-size: clamp(44px, 13vw, 80px); }
+      .hero-h1 .row2 { font-size: clamp(52px, 16vw, 96px) !important; }
+      .hero-sub { font-size: 18px; margin-bottom: 32px; }
+      .btn-rosa, .btn-ghost-w { padding: 13px 24px; font-size: 9px; }
+      #sobre { grid-template-columns: 1fr; padding: 72px 24px; gap: 40px; }
+      .sobre-img { height: 340px; }
+      #equipe { padding: 72px 24px; }
+      .equipe-inner { grid-template-columns: 1fr; gap: 40px; }
       .equipe-foto img { aspect-ratio: 4/3; }
-      #aulas { padding: 80px 28px; }
+      #aulas { padding: 72px 24px; }
       .aulas-top { flex-direction: column; gap: 20px; }
-      .aulas-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
-      .aulas-foto { height: 320px; }
-      #galeria { padding: 0 28px 80px; }
-      .galeria-grid {
-        grid-template-columns: 1fr 1fr;
-        grid-auto-rows: 200px;
-      }
-      .g-item:nth-child(n) { grid-column: auto; height: 200px; }
-      .g-item:nth-child(2) { grid-column: span 2; }
-      .g-item:nth-child(4) { grid-column: span 2; }
-      .g-item:nth-child(9) { grid-column: span 2; }
-      #precos { padding: 80px 28px; }
+      .aulas-grid { grid-template-columns: 1fr 1fr; gap: 24px; }
+      .aulas-foto { height: 280px; }
+      #galeria { padding: 0 24px 72px; }
+      .galeria-grid { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 180px; gap: 6px; }
+      .g-item { height: 180px !important; grid-column: auto !important; grid-row: auto !important; }
+      .g-item:nth-child(1) { grid-column: span 2 !important; }
+      .g-item:nth-child(6) { grid-column: span 2 !important; }
+      .g-item:nth-child(11) { grid-column: span 2 !important; }
+      #precos { padding: 72px 24px; }
       .precos-top { flex-direction: column; align-items: flex-start; }
       .precos-top p { text-align: left; max-width: 100%; }
-      .cards-row { grid-template-columns: 1fr; max-width: 420px; }
-      .desconto-strip { flex-direction: column; }
-      #depoimentos { padding: 80px 28px; }
-      .dep-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+      .cards-row { grid-template-columns: 1fr; max-width: 100%; }
+      .desconto-strip { flex-direction: column; padding: 24px; }
+      .desconto-strip a { margin-left: 0; }
+      #depoimentos { padding: 72px 24px; }
+      .dep-header { flex-direction: column; align-items: flex-start; gap: 16px; }
       .dep-grid { grid-template-columns: 1fr; }
-      #itacare { grid-template-columns: 1fr; padding: 80px 28px; gap: 52px; }
-      .itacare-img { height: 320px; }
-      #contato { grid-template-columns: 1fr; padding: 80px 28px; gap: 52px; }
-      footer { padding: 44px 24px 32px; }
+      #itacare { grid-template-columns: 1fr; padding: 72px 24px; gap: 48px; }
+      .itacare-img { height: 300px; }
+      .stats-row { gap: 28px; }
+      #contato { grid-template-columns: 1fr; padding: 72px 24px; gap: 48px; }
+      footer { padding: 40px 24px 28px; }
+      .foot-links { gap: 20px; }
     }
-    @media (max-width: 560px) {
+    @media (max-width: 480px) {
+      .hero-h1 { font-size: clamp(38px, 12vw, 60px); }
+      .hero-h1 .row2 { font-size: clamp(46px, 15vw, 76px) !important; }
       .aulas-grid { grid-template-columns: 1fr; }
-      .galeria-grid { grid-template-columns: 1fr; grid-auto-rows: 260px; }
-      .g-item.tall { grid-row: span 1; }
+      .galeria-grid { grid-template-columns: 1fr !important; grid-auto-rows: 220px !important; }
+      .g-item { height: 220px !important; grid-column: 1 !important; }
     }
   </style>
 </head>
 <body>
- 
+
 <!-- NAV -->
 <nav id="nav">
   <a href="#hero" class="nav-logo">
@@ -658,7 +667,7 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
- 
+
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg"></div>
@@ -675,7 +684,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- TAPE -->
 <div class="tape">
   <div class="tape-track">
@@ -695,7 +704,7 @@
     <span>Destrava Surf</span><span class="sep"> · </span>
   </div>
 </div>
- 
+
 <!-- SOBRE -->
 <section id="sobre">
   <div class="sobre-img">
@@ -709,7 +718,7 @@
     <p>Grupos pequenos, método claro, atenção real dentro e fora da água. Em Itacaré, uma das melhores praias do Brasil para aprender.</p>
   </div>
 </section>
- 
+
 <!-- EQUIPE -->
 <section id="equipe">
   <div class="equipe-inner">
@@ -734,7 +743,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- AULAS -->
 <section id="aulas">
   <div class="aulas-top">
@@ -765,7 +774,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- GALERIA — 10 frames -->
 <section id="galeria">
   <div class="galeria-header">
@@ -817,7 +826,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- PREÇOS -->
 <section id="precos">
   <div class="precos-top">
@@ -871,7 +880,7 @@
     <a href="https://wa.me/5573998592297?text=Olá!%20Tenho%20interesse%20em%20um%20pacote%20de%20aulas%20na%20Destrava." target="_blank">Perguntar →</a>
   </div>
 </section>
- 
+
 <!-- DEPOIMENTOS -->
 <section id="depoimentos">
   <div class="dep-header">
@@ -918,7 +927,7 @@
   </div>
   <p class="dep-cta">Quer ver mais avaliações? <a href="https://share.google/WOsqaUYfDfMvtuEKR" target="_blank">Acesse nosso perfil no Google →</a></p>
 </section>
- 
+
 <!-- ITACARÉ -->
 <section id="itacare">
   <div class="itacare-txt">
@@ -934,7 +943,7 @@
   </div>
   <img class="itacare-img" src="images/itacare.jpg" alt="Itacaré, Bahia">
 </section>
- 
+
 <!-- CONTATO -->
 <section id="contato">
   <div class="contato-txt">
@@ -961,7 +970,7 @@
     </div>
   </div>
 </section>
- 
+
 <!-- FOOTER -->
 <footer>
   <img src="images/logo_white.png" alt="Destrava Surf">
@@ -977,7 +986,7 @@
   </ul>
   <small>© 2025 Destrava Surf · destravasurf.com.br · Itacaré, Bahia, Brasil</small>
 </footer>
- 
+
 <script>
   // Nav scroll behavior
   const nav = document.getElementById('nav');
@@ -989,7 +998,7 @@
     nav.classList.toggle('scrolled', scrolled);
     logoImg.src = scrolled ? logoB : logoW;
   });
- 
+
   // Mobile menu
   function toggleMenu() {
     const ul = nav.querySelector('ul');
@@ -1000,7 +1009,7 @@
       ul.querySelectorAll('a').forEach(a => a.style.color = '#2E2A26');
     }
   }
- 
+
   // Close menu on link click
   document.querySelectorAll('nav ul a').forEach(a => {
     a.addEventListener('click', () => {
@@ -1011,5 +1020,7 @@
 </script>
 </body>
 </html>
+
+
 
 
