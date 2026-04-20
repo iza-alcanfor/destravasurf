@@ -570,6 +570,34 @@
     }
     .info-sub { font-size: 13px; color: var(--cinza); margin-top: 2px; font-weight: 300; }
 
+    /* ── INSTAGRAM ── */
+    #instagram {
+      padding: 80px 56px;
+      background: var(--areia);
+      text-align: center;
+    }
+    .insta-inner {
+      max-width: 520px; margin: 0 auto;
+    }
+    .insta-inner .kicker { justify-content: center; }
+    .insta-inner .kicker::before { display: none; }
+    .insta-inner .section-h2 { margin-bottom: 16px; }
+    .insta-sub {
+      font-size: 17px; line-height: 1.7; color: var(--cinza);
+      font-weight: 300; margin-bottom: 36px;
+    }
+    .btn-insta {
+      display: inline-flex; align-items: center; gap: 12px;
+      background: var(--fumo); color: var(--gelo);
+      padding: 16px 36px; border-radius: 100px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.25s;
+    }
+    .btn-insta:hover { background: #1a1714; transform: translateY(-2px); }
+    .btn-insta svg { width: 18px; height: 18px; fill: var(--gelo); flex-shrink: 0; }
+
     /* ── FOOTER ── */
     footer {
       background: var(--fumo);
@@ -577,7 +605,7 @@
       display: flex; flex-direction: column; align-items: center; gap: 28px;
       border-top: 3px solid var(--rosa);
     }
-    footer img { height: 36px; filter: invert(1) brightness(2); opacity: 0.45; }
+    footer .foot-logo { height: 36px; opacity: 0.5; }
     .foot-links { display: flex; gap: 32px; flex-wrap: wrap; justify-content: center; list-style: none; }
     .foot-links a {
       font-family: 'Space Mono', monospace; font-size: 9px;
@@ -631,6 +659,7 @@
       .itacare-img { height: 300px; }
       .stats-row { gap: 28px; }
       #contato { grid-template-columns: 1fr; padding: 72px 24px; gap: 48px; }
+      #instagram { padding: 60px 24px; }
       footer { padding: 40px 24px 28px; }
       .foot-links { gap: 20px; }
     }
@@ -963,9 +992,22 @@
   </div>
 </section>
 
+<!-- INSTAGRAM -->
+<section id="instagram">
+  <div class="insta-inner">
+    <div class="kicker">Conheça nosso Instagram</div>
+    <h2 class="section-h2">Aulas, ondas e<br><em>Itacaré no dia a dia.</em></h2>
+    <p class="insta-sub">Acompanhe as sessões, os alunos e a vibe da Destrava pelo nosso perfil. Tem vídeo de aula, dica de surf e muito mar bonito.</p>
+    <a href="https://www.instagram.com/destravasurf/" target="_blank" class="btn-insta">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      @destravasurf
+    </a>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
-  <img src="images/logo_white.png" alt="Destrava Surf">
+  <img class="foot-logo" src="images/logo_white.png" alt="Destrava Surf">
   <ul class="foot-links">
     <li><a href="#sobre">Sobre</a></li>
     <li><a href="#equipe">Equipe</a></li>
@@ -1009,5 +1051,6 @@
 </script>
 </body>
 </html>
+
 
 
