@@ -618,21 +618,6 @@
       letter-spacing: 0.1em; color: rgba(247,245,242,0.15);
     }
 
-    /* ── LANG TOGGLE ── */
-    .nav-right { display: flex; align-items: center; gap: 12px; }
-    .lang-toggle {
-      font-family: 'Space Mono', monospace;
-      font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase;
-      background: none; border: 1.5px solid rgba(247,245,242,0.4);
-      color: var(--gelo); padding: 6px 14px; border-radius: 100px;
-      cursor: pointer; transition: all 0.25s;
-    }
-    nav.scrolled .lang-toggle { border-color: rgba(46,42,38,0.2); color: var(--fumo); }
-    .lang-toggle:hover { border-color: var(--rosa); color: var(--rosa); }
-    .lang-toggle.active { background: var(--rosa); color: white; border-color: var(--rosa); }
-    .dep-note { display: none; font-style: normal; font-size: 13px; color: var(--cinza); opacity: 0.7; margin-top: 4px; }
-    html[lang="en"] .dep-note { display: block; }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 960px) {
       nav { padding: 14px 24px; background: rgba(247,245,242,0.97); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(46,42,38,0.08); }
@@ -641,7 +626,6 @@
       .nav-logo img { filter: brightness(0) !important; }
       nav ul { display: none; }
       .nav-hamburger { display: flex; }
-      .lang-toggle { border-color: rgba(46,42,38,0.2); color: var(--fumo); }
       #hero .hero-content {
         padding: 0 24px 32px;
         display: flex; flex-direction: column;
@@ -701,19 +685,16 @@
     <img id="nav-logo-img" src="images/logo_white.png" alt="Destrava Surf">
   </a>
   <ul>
-    <li><a href="#sobre" data-en="About">Sobre</a></li>
-    <li><a href="#equipe" data-en="Team">Equipe</a></li>
-    <li><a href="#aulas" data-en="Lessons">Aulas</a></li>
-    <li><a href="#galeria" data-en="Gallery">Galeria</a></li>
-    <li><a href="#precos" data-en="Pricing">Preços</a></li>
-    <li><a href="#contato" class="nav-cta" data-en="Book Now">Reservar</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#equipe">Equipe</a></li>
+    <li><a href="#aulas">Aulas</a></li>
+    <li><a href="#galeria">Galeria</a></li>
+    <li><a href="#precos">Preços</a></li>
+    <li><a href="#contato" class="nav-cta">Reservar</a></li>
   </ul>
-  <div class="nav-right">
-    <button class="lang-toggle" onclick="toggleLang()">EN</button>
-    <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
-      <span></span><span></span><span></span>
-    </button>
-  </div>
+  <button class="nav-hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
 
 <!-- HERO -->
@@ -725,10 +706,10 @@
       <span class="row1">DESTRAVA</span>
       <span class="row2">SURF</span>
     </h1>
-    <p class="hero-sub" data-en="Learn for real.<br>From someone who knows the ocean.">Aprenda de verdade.<br>Com quem entende o mar.</p>
+    <p class="hero-sub">Aprenda de verdade.<br>Com quem entende o mar.</p>
     <div class="hero-actions">
-      <a href="#precos" class="btn-rosa" data-en="See Pricing">Ver preços</a>
-      <a href="#sobre" class="btn-ghost-w" data-en="Learn More">Conhecer</a>
+      <a href="#precos" class="btn-rosa">Ver preços</a>
+      <a href="#sobre" class="btn-ghost-w">Conhecer</a>
     </div>
   </div>
 </section>
@@ -736,19 +717,19 @@
 <!-- TAPE -->
 <div class="tape">
   <div class="tape-track">
-    <span data-en="Surf Lesson">Aula de Surf</span><span class="sep"> · </span>
+    <span>Aula de Surf</span><span class="sep"> · </span>
     <span>Itacaré, BA</span><span class="sep"> · </span>
-    <span data-en="Beginner to Advanced">Iniciante ao Avançado</span><span class="sep"> · </span>
-    <span data-en="Video Analysis">Vídeo Análise</span><span class="sep"> · </span>
-    <span data-en="Professional Instructor">Instrutor Profissional</span><span class="sep"> · </span>
-    <span data-en="Southern Bahia">Sul da Bahia</span><span class="sep"> · </span>
+    <span>Iniciante ao Avançado</span><span class="sep"> · </span>
+    <span>Vídeo Análise</span><span class="sep"> · </span>
+    <span>Instrutor Profissional</span><span class="sep"> · </span>
+    <span>Sul da Bahia</span><span class="sep"> · </span>
     <span>Destrava Surf</span><span class="sep"> · </span>
-    <span data-en="Surf Lesson">Aula de Surf</span><span class="sep"> · </span>
+    <span>Aula de Surf</span><span class="sep"> · </span>
     <span>Itacaré, BA</span><span class="sep"> · </span>
-    <span data-en="Beginner to Advanced">Iniciante ao Avançado</span><span class="sep"> · </span>
-    <span data-en="Video Analysis">Vídeo Análise</span><span class="sep"> · </span>
-    <span data-en="Professional Instructor">Instrutor Profissional</span><span class="sep"> · </span>
-    <span data-en="Southern Bahia">Sul da Bahia</span><span class="sep"> · </span>
+    <span>Iniciante ao Avançado</span><span class="sep"> · </span>
+    <span>Vídeo Análise</span><span class="sep"> · </span>
+    <span>Instrutor Profissional</span><span class="sep"> · </span>
+    <span>Sul da Bahia</span><span class="sep"> · </span>
     <span>Destrava Surf</span><span class="sep"> · </span>
   </div>
 </div>
@@ -760,10 +741,10 @@
     <div class="img-tag">Itacaré · BA</div>
   </div>
   <div class="sobre-txt">
-    <div class="kicker" data-en="About Destrava">Sobre a Destrava</div>
-    <h2 class="section-h2" data-en="Technical surf,<br><em>real evolution.</em>">Surf técnico,<br><em>evolução real.</em></h2>
-    <p data-en="Founded in 2024 by Salomão Martins, Destrava was born for those who want to truly evolve in surfing — understanding the why behind every movement, working on their own progression with awareness, safety, and respect for nature.">Fundada em 2024 por Salomão Martins, a Destrava nasceu para quem quer evoluir no surf de verdade — entendendo o porquê de cada movimento, trabalhando a própria evolução com consciência, segurança e respeito à natureza.</p>
-    <p data-en="In Itacaré, lessons usually take place at Praia da Engenhoca, one of the best beaches in Bahia to learn to surf, with waves that work at both low and high tide.">Em Itacaré, as aulas costumam acontecer na Praia da Engenhoca, uma das melhores praias da Bahia para aprender a surfar, com ondas que funcionam tanto na maré seca quanto na maré cheia.</p>
+    <div class="kicker">Sobre a Destrava</div>
+    <h2 class="section-h2">Surf técnico,<br><em>evolução real.</em></h2>
+    <p>Fundada em 2024 por Salomão Martins, a Destrava nasceu para quem quer evoluir no surf de verdade — entendendo o porquê de cada movimento, trabalhando a própria evolução com consciência, segurança e respeito à natureza.</p>
+    <p>Em Itacaré, as aulas costumam acontecer na Praia da Engenhoca, uma das melhores praias da Bahia para aprender a surfar, com ondas que funcionam tanto na maré seca quanto na maré cheia.</p>
   </div>
 </section>
 
@@ -774,21 +755,21 @@
       <img src="images/salomao.jpg" alt="Salomão — Instrutor">
       <div class="nome-tag">
         <strong>Salomão Martins</strong>
-        <span data-en="Surf Instructor · Itacaré">Instrutor de Surf · Itacaré</span>
+        <span>Instrutor de Surf · Itacaré</span>
       </div>
     </div>
     <div class="equipe-txt">
-      <div class="kicker" data-en="The Team">A equipe</div>
-      <h2 class="section-h2" data-en="Learn from<br><em>those who live the ocean.</em>">Aprenda com<br><em>quem vive o mar.</em></h2>
-      <p data-en="Salomão Martins is a native of Itacaré with 14 years of experience teaching surf. The son of a fisherman, he carries deep knowledge of the ocean and nature — and has perfected the art of teaching with patience, clarity, and true passion for the sport.">Salomão Martins é nativo de Itacaré e tem 14 anos de experiência dando aulas de surf. Filho de pescador, carrega um conhecimento profundo sobre o mar e a natureza — e aperfeiçoou a arte de ensinar com paciência, clareza e muita paixão pelo esporte.</p>
-      <p data-en="With him, every lesson comes with real feedback. You understand what you're doing right, what you can improve, and why. Outside the water, Salomão is also passionate about gastronomy — his moqueca is famous among the crew.">Com ele, cada aula tem feedback real. Você entende o que está fazendo certo, o que pode melhorar e por quê. Fora da água, Salomão também tem a gastronomia como uma de suas paixões — sua moqueca é famosa entre a galera.</p>
-      <p data-en="Salomão is certified by the Brazilian Surf Confederation in two categories: Surf Instructor and SurfCoach. He also holds certifications in Aquatic Rescue and First Aid from Salvamar & CBSURF.">Salomão é certificado pela Confederação Brasileira de Surf em duas modalidades: Instrutor de Surf e SurfCoach. Também possui certificação de Salvamento Aquático e Primeiros Socorros pela Salvamar & CBSURF</p>
+      <div class="kicker">A equipe</div>
+      <h2 class="section-h2">Aprenda com<br><em>quem vive o mar.</em></h2>
+      <p>Salomão Martins é nativo de Itacaré e tem 14 anos de experiência dando aulas de surf. Filho de pescador, carrega um conhecimento profundo sobre o mar e a natureza — e aperfeiçoou a arte de ensinar com paciência, clareza e muita paixão pelo esporte.</p>
+      <p>Com ele, cada aula tem feedback real. Você entende o que está fazendo certo, o que pode melhorar e por quê. Fora da água, Salomão também tem a gastronomia como uma de suas paixões — sua moqueca é famosa entre a galera.</p>
+      <p>Salomão é certificado pela Confederação Brasileira de Surf em duas modalidades: Instrutor de Surf e SurfCoach. Também possui certificação de Salvamento Aquático e Primeiros Socorros pela Salvamar & CBSURF</p>
       <div class="equipe-pills">
-        <span class="pill" data-en="14 Years of Experience">14 anos de experiência</span>
-        <span class="pill" data-en="Itacaré Native">Nativo de Itacaré</span>
-        <span class="pill" data-en="Fisherman's Son">Filho de pescador</span>
-        <span class="pill" data-en="Video Analysis">Análise de vídeo</span>
-        <span class="pill" data-en="CBSURF Certified">Certificado CBSURF</span>
+        <span class="pill">14 anos de experiência</span>
+        <span class="pill">Nativo de Itacaré</span>
+        <span class="pill">Filho de pescador</span>
+        <span class="pill">Análise de vídeo</span>
+        <span class="pill">Certificado CBSURF</span>
       </div>
     </div>
   </div>
@@ -797,30 +778,30 @@
 <!-- AULAS -->
 <section id="aulas">
   <div class="aulas-top">
-    <h2 class="section-h2" data-en="What you<br><em>learn</em><br>with us">O que você<br><em>aprende</em><br>com a gente</h2>
-    <p data-en="From balancing on the board to reading the waves — we teach what truly matters for your real progression.">Do equilíbrio na prancha à leitura das ondas — ensinamos o que realmente importa pra você evoluir de verdade.</p>
+    <h2 class="section-h2">O que você<br><em>aprende</em><br>com a gente</h2>
+    <p>Do equilíbrio na prancha à leitura das ondas — ensinamos o que realmente importa pra você evoluir de verdade.</p>
   </div>
   <img class="aulas-foto" src="images/aulas.jpg" alt="Warm-up na areia — Destrava Surf">
   <div class="aulas-grid">
     <div class="aula-item">
       <div class="aula-n">01 ——</div>
-      <h3 data-en="Position & Paddling">Posição & Remada</h3>
-      <p data-en="The foundation of everything. Correct board positioning and efficient paddling technique to catch waves.">A base de tudo. Posição correta na prancha e técnica de remada eficiente pra pegar as ondas.</p>
+      <h3>Posição & Remada</h3>
+      <p>A base de tudo. Posição correta na prancha e técnica de remada eficiente pra pegar as ondas.</p>
     </div>
     <div class="aula-item">
       <div class="aula-n">02 ——</div>
-      <h3 data-en="The Pop-Up">O Pop-Up</h3>
-      <p data-en="Getting up quickly, smoothly, and at the right time. Practiced on land before hitting the water.">Levantar rápido, fluido e no tempo certo. Praticado em terra antes de entrar na água.</p>
+      <h3>O Pop-Up</h3>
+      <p>Levantar rápido, fluido e no tempo certo. Praticado em terra antes de entrar na água.</p>
     </div>
     <div class="aula-item">
       <div class="aula-n">03 ——</div>
-      <h3 data-en="Reading the Waves">Leitura das Ondas</h3>
-      <p data-en="Understanding the ocean is essential in surfing. You learn to read waves and position yourself in the lineup.">Entender o mar é essencial no surf. Você aprende a ler a ondas e se posicionar no lineup.</p>
+      <h3>Leitura das Ondas</h3>
+      <p>Entender o mar é essencial no surf. Você aprende a ler a ondas e se posicionar no lineup.</p>
     </div>
     <div class="aula-item">
       <div class="aula-n">04 ——</div>
-      <h3 data-en="Maneuvers & Progression">Manobras & Evolução</h3>
-      <p data-en="For those who already generate speed: techniques for cutbacks, hits, and carves. Learn to nail a proper bottom turn.">Para quem já pega velocidade: técnicas para cutbacks, batidas e rasgadas. Aprenda a fazer um bottom turn bem feito.</p>
+      <h3>Manobras & Evolução</h3>
+      <p>Para quem já pega velocidade: técnicas para cutbacks, batidas e rasgadas. Aprenda a fazer um bottom turn bem feito.</p>
     </div>
   </div>
 </section>
@@ -828,8 +809,8 @@
 <!-- GALERIA — 13 frames -->
 <section id="galeria">
   <div class="galeria-header">
-    <h2 class="section-h2" style="margin-bottom:0" data-en="Life in <em>Itacaré</em>">A vida em <em>Itacaré</em></h2>
-    <span class="galeria-meta" data-en="Photo Gallery">Galeria de fotos</span>
+    <h2 class="section-h2" style="margin-bottom:0">A vida em <em>Itacaré</em></h2>
+    <span class="galeria-meta">Galeria de fotos</span>
   </div>
   <div class="galeria-grid">
     <div class="g-item wide">
@@ -877,61 +858,61 @@
 <!-- PREÇOS -->
 <section id="precos">
   <div class="precos-top">
-    <h2 class="section-h2" data-en="Single Lessons<br><em>& Packages</em>">Aulas Avulsas<br><em>e Pacotes</em></h2>
-    <p data-en="Everything arranged via WhatsApp — no forms, no hassle.">Tudo negociado pelo WhatsApp — sem formulário, sem complicação.</p>
+    <h2 class="section-h2">Aulas Avulsas<br><em>e Pacotes</em></h2>
+    <p>Tudo negociado pelo WhatsApp — sem formulário, sem complicação.</p>
   </div>
   <div class="cards-row">
     <div class="pcard">
       <span class="pcard-icon">🏄</span>
-      <h3 data-en="Surf Lesson">Aula de Surf</h3>
-      <p class="sub" data-en="Lesson with Salomão at the beach. Warm-up, technique, and feedback in and out of the water.">Aula com Salomão na praia. Warm-up, técnica e feedback dentro e fora da água.</p>
+      <h3>Aula de Surf</h3>
+      <p class="sub">Aula com Salomão na praia. Warm-up, técnica e feedback dentro e fora da água.</p>
       <div class="price-row">
         <span class="price-curr">R$</span>
         <span class="price-num">200</span>
-        <span class="price-unit" data-en="/ lesson">/ aula</span>
+        <span class="price-unit">/ aula</span>
       </div>
       <hr>
       <ul class="feat-list">
-        <li data-en="Beach transport included">Transporte até a praia</li>
-        <li data-en="All levels">Todos os níveis</li>
-        <li data-en="Equipment included">Equipamento incluso</li>
-        <li data-en="Beach warm-up">Warm-up na areia</li>
+        <li>Transporte até a praia</li>
+        <li>Todos os níveis</li>
+        <li>Equipamento incluso</li>
+        <li>Warm-up na areia</li>
       </ul>
-      <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20de%20surf%20com%20a%20Destrava." target="_blank" class="btn-pcard" data-en="Book lesson →">Marcar aula →</a>
+      <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20de%20surf%20com%20a%20Destrava." target="_blank" class="btn-pcard">Marcar aula →</a>
     </div>
     <div class="pcard hot">
       <span class="pcard-icon">🎥</span>
-      <h3 data-en="Lesson + Video Analysis">Aula + Vídeo Análise</h3>
-      <p class="sub" data-en="With session filming and post-lesson technical analysis. You see exactly where to improve.">Com filmagem da sessão e análise técnica pós-aula. Você vê exatamente onde evoluir.</p>
+      <h3>Aula + Vídeo Análise</h3>
+      <p class="sub">Com filmagem da sessão e análise técnica pós-aula. Você vê exatamente onde evoluir.</p>
       <div class="price-row">
         <span class="price-curr">R$</span>
         <span class="price-num">280</span>
-        <span class="price-unit" data-en="/ lesson">/ aula</span>
+        <span class="price-unit">/ aula</span>
       </div>
       <hr>
       <ul class="feat-list">
-        <li data-en="Everything from the standard lesson">Tudo da aula padrão</li>
-        <li data-en="Session filming">Filmagem da sessão</li>
-        <li data-en="Post-lesson technical analysis">Análise técnica pós-aula</li>
-        <li data-en="Visual feedback of your surfing">Feedback visual do seu surf</li>
+        <li>Tudo da aula padrão</li>
+        <li>Filmagem da sessão</li>
+        <li>Análise técnica pós-aula</li>
+        <li>Feedback visual do seu surf</li>
       </ul>
-      <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20com%20análise%20de%20vídeo%20na%20Destrava." target="_blank" class="btn-pcard" data-en="I want this →">Quero esse →</a>
+      <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20com%20análise%20de%20vídeo%20na%20Destrava." target="_blank" class="btn-pcard">Quero esse →</a>
     </div>
   </div>
   <div class="desconto-strip">
     <span class="d-icon">🤙</span>
-    <p data-en="<strong>Package of 3+ lessons? There's a discount.</strong> For those staying a few days in Itacaré, we put together a special package. Get in touch.">
+    <p>
       <strong>Pacote a partir de 3 aulas? Tem desconto.</strong>
       Pra quem fica alguns dias em Itacaré, montamos um pacote especial. Fala com a gente.
     </p>
-    <a href="https://wa.me/5573998592297?text=Olá!%20Tenho%20interesse%20em%20um%20pacote%20de%20aulas%20na%20Destrava." target="_blank" data-en="Ask us →">Perguntar →</a>
+    <a href="https://wa.me/5573998592297?text=Olá!%20Tenho%20interesse%20em%20um%20pacote%20de%20aulas%20na%20Destrava." target="_blank">Perguntar →</a>
   </div>
 </section>
 
 <!-- DEPOIMENTOS -->
 <section id="depoimentos">
   <div class="dep-header">
-    <h2 class="section-h2" style="margin-bottom:0" data-en="What our<br><em>students say</em>">O que dizem<br><em>nossos alunos</em></h2>
+    <h2 class="section-h2" style="margin-bottom:0">O que dizem<br><em>nossos alunos</em></h2>
     <div class="google-tag">
       <span class="stars">★★★★★</span>
       5.0 · Google Reviews
@@ -941,7 +922,6 @@
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
       <p class="dep-text">A Destrava Surf me trouxe dias incríveis em Itacaré. O professor Salomão é o melhor professor que eu já tive, sua didática é impecável e com ele eu consegui, finalmente, destravar as minhas manobras. As aulas com filmagens são muito boas, inclusive com o drone que captura as paisagens lindas das praias de Itacaré. As vídeo-análises foram extremamente úteis para ver o que eu precisava melhorar para o surfe do dia seguinte. Recomendo demais e com certeza voltarei para fazer mais aulas com eles.</p>
-      <p class="dep-note">Originally in Portuguese</p>
       <div class="dep-autor">
         <div class="dep-avatar">VM</div>
         <div>
@@ -953,7 +933,6 @@
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
       <p class="dep-text">Estou há 1 ano tendo aulas de surf com a Destrava Surf, com o melhor professor, Salomão! Tudo que sei no surf devo a essa grande pessoa que hoje se tornou um grande amigo! Vem pra Destrava!</p>
-      <p class="dep-note">Originally in Portuguese</p>
       <div class="dep-autor">
         <div class="dep-avatar">LW</div>
         <div>
@@ -965,7 +944,6 @@
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
       <p class="dep-text">Alguns diferenciais da Destrava: pontualidade, filmagem (faz toda diferença pra evoluir), possibilidade de variar a praia, tem carro e pode levar o aluno. Fora a resenha garantida!</p>
-      <p class="dep-note">Originally in Portuguese</p>
       <div class="dep-autor">
         <div class="dep-avatar">EF</div>
         <div>
@@ -975,20 +953,20 @@
       </div>
     </div>
   </div>
-  <p class="dep-cta" data-en="Want to see more reviews? <a href='https://share.google/WOsqaUYfDfMvtuEKR' target='_blank'>Visit our Google profile →</a>">Quer ver mais avaliações? <a href="https://share.google/WOsqaUYfDfMvtuEKR" target="_blank">Acesse nosso perfil no Google →</a></p>
+  <p class="dep-cta">Quer ver mais avaliações? <a href="https://share.google/WOsqaUYfDfMvtuEKR" target="_blank">Acesse nosso perfil no Google →</a></p>
 </section>
 
 <!-- ITACARÉ -->
 <section id="itacare">
   <div class="itacare-txt">
-    <div class="kicker" data-en="The Destination">O destino</div>
-    <h2 class="section-h2" data-en="Why Itacaré<br><em>is different</em>">Por que Itacaré<br><em>é diferente</em></h2>
-    <p data-en="In southern Bahia, Itacaré combines consistent waves, ideal temperatures year-round, and nature you won't find anywhere else.">No sul da Bahia, Itacaré combina ondas consistentes, temperatura ideal o ano inteiro e uma natureza que você não encontra em nenhum outro lugar.</p>
-    <p data-en="Sandy-bottom beaches with Atlantic Forest reaching the ocean's edge. Here, surfing is a complete experience.">Praias de fundo de areia, Mata Atlântica chegando até a beira do mar. Aqui o surf é uma experiência completa.</p>
+    <div class="kicker">O destino</div>
+    <h2 class="section-h2">Por que Itacaré<br><em>é diferente</em></h2>
+    <p>No sul da Bahia, Itacaré combina ondas consistentes, temperatura ideal o ano inteiro e uma natureza que você não encontra em nenhum outro lugar.</p>
+    <p>Praias de fundo de areia, Mata Atlântica chegando até a beira do mar. Aqui o surf é uma experiência completa.</p>
     <div class="stats-row">
-      <div><div class="stat-n">27<em>°C</em></div><div class="stat-lbl" data-en="Ocean year-round">Mar o ano todo</div></div>
-      <div><div class="stat-n">5<em>+</em></div><div class="stat-lbl" data-en="Surf beaches">Praias de surf</div></div>
-      <div><div class="stat-n">365</div><div class="stat-lbl" data-en="Days of waves">Dias de ondas</div></div>
+      <div><div class="stat-n">27<em>°C</em></div><div class="stat-lbl">Mar o ano todo</div></div>
+      <div><div class="stat-n">5<em>+</em></div><div class="stat-lbl">Praias de surf</div></div>
+      <div><div class="stat-n">365</div><div class="stat-lbl">Dias de ondas</div></div>
     </div>
   </div>
   <img class="itacare-img" src="images/itacare.jpg" alt="Itacaré, Bahia">
@@ -997,26 +975,26 @@
 <!-- CONTATO -->
 <section id="contato">
   <div class="contato-txt">
-    <div class="kicker" data-en="Let's surf?">Vamos surfar?</div>
-    <h2 class="section-h2" data-en="Ready to<br><em>unlock your surf?</em>">Pronto pra<br><em>destravar?</em></h2>
-    <p data-en="Send us a WhatsApp message — we'll reply as soon as we can and find the best day for your lesson.">Manda uma mensagem no WhatsApp — respondemos assim que pudermos e encontramos o melhor dia pra sua aula.</p>
+    <div class="kicker">Vamos surfar?</div>
+    <h2 class="section-h2">Pronto pra<br><em>destravar?</em></h2>
+    <p>Manda uma mensagem no WhatsApp — respondemos assim que pudermos e encontramos o melhor dia pra sua aula.</p>
     <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20de%20surf%20com%20a%20Destrava%20em%20Itacaré." target="_blank" class="wpp-btn">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12c0 1.89.525 3.657 1.436 5.168L2 22l4.932-1.416A9.955 9.955 0 0012.004 22C17.523 22 22 17.523 22 12S17.523 2 12.004 2zm0 18.153a8.13 8.13 0 01-4.141-1.131l-.296-.177-3.073.882.847-3.175-.196-.31A8.153 8.153 0 1112.004 20.153z"/></svg>
-      <span data-en="Chat on WhatsApp">Falar no WhatsApp</span>
+      Falar no WhatsApp
     </a>
   </div>
   <div class="infos">
     <div class="info-row">
-      <div><div class="info-lbl">WhatsApp</div><div class="info-val">+55 73 99859-2297</div><div class="info-sub" data-en="Some beaches have no signal, but we'll reply as soon as possible">Em algumas praias não tem sinal, mas responderemos assim que pudermos</div></div>
+      <div><div class="info-lbl">WhatsApp</div><div class="info-val">+55 73 99859-2297</div><div class="info-sub">Em algumas praias não tem sinal, mas responderemos assim que pudermos</div></div>
     </div>
     <div class="info-row">
-      <div><div class="info-lbl" data-en="Location">Localização</div><div class="info-val">Itacaré, Bahia</div><div class="info-sub" data-en="Southern Bahia — Brazil">Sul da Bahia — Brasil</div></div>
+      <div><div class="info-lbl">Localização</div><div class="info-val">Itacaré, Bahia</div><div class="info-sub">Sul da Bahia — Brasil</div></div>
     </div>
     <div class="info-row">
-      <div><div class="info-lbl" data-en="Pricing">Preços</div><div class="info-val" data-en="R$ 200 — R$ 280 / lesson">R$ 200 — R$ 280 / aula</div><div class="info-sub" data-en="Discount for 3+ lessons">Desconto a partir de 3 aulas</div></div>
+      <div><div class="info-lbl">Preços</div><div class="info-val">R$ 200 — R$ 280 / aula</div><div class="info-sub">Desconto a partir de 3 aulas</div></div>
     </div>
     <div class="info-row">
-      <div><div class="info-lbl" data-en="Level">Nível</div><div class="info-val" data-en="Everyone welcome">Todos bem-vindos</div><div class="info-sub" data-en="From beginner to advanced">Do iniciante ao avançado</div></div>
+      <div><div class="info-lbl">Nível</div><div class="info-val">Todos bem-vindos</div><div class="info-sub">Do iniciante ao avançado</div></div>
     </div>
   </div>
 </section>
@@ -1024,9 +1002,9 @@
 <!-- INSTAGRAM -->
 <section id="instagram">
   <div class="insta-inner">
-    <div class="kicker" data-en="Follow us on Instagram">Conheça nosso Instagram</div>
-    <h2 class="section-h2" data-en="Lessons, waves, and<br><em>daily life in Itacaré.</em>">Aulas, ondas e<br><em>Itacaré no dia a dia.</em></h2>
-    <p class="insta-sub" data-en="Follow our sessions, students, and the Destrava vibe on our profile. Lesson videos, surf tips, and lots of beautiful ocean.">Acompanhe as sessões, os alunos e a vibe da Destrava pelo nosso perfil. Tem vídeo de aula, dica de surf e muito mar bonito.</p>
+    <div class="kicker">Conheça nosso Instagram</div>
+    <h2 class="section-h2">Aulas, ondas e<br><em>Itacaré no dia a dia.</em></h2>
+    <p class="insta-sub">Acompanhe as sessões, os alunos e a vibe da Destrava pelo nosso perfil. Tem vídeo de aula, dica de surf e muito mar bonito.</p>
     <a href="https://www.instagram.com/destravasurf/" target="_blank" class="btn-insta">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
       @destravasurf
@@ -1038,16 +1016,16 @@
 <footer>
   <img class="foot-logo" src="images/logo_white.png" alt="Destrava Surf">
   <ul class="foot-links">
-    <li><a href="#sobre" data-en="About">Sobre</a></li>
-    <li><a href="#equipe" data-en="Team">Equipe</a></li>
-    <li><a href="#aulas" data-en="Lessons">Aulas</a></li>
-    <li><a href="#precos" data-en="Pricing">Preços</a></li>
-    <li><a href="#galeria" data-en="Gallery">Galeria</a></li>
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#equipe">Equipe</a></li>
+    <li><a href="#aulas">Aulas</a></li>
+    <li><a href="#precos">Preços</a></li>
+    <li><a href="#galeria">Galeria</a></li>
     <li><a href="#itacare">Itacaré</a></li>
-    <li><a href="#contato" data-en="Contact">Contato</a></li>
+    <li><a href="#contato">Contato</a></li>
     <li><a href="https://www.instagram.com/destravasurf/" target="_blank">↗ Instagram</a></li>
   </ul>
-  <small data-en="© 2025 Destrava Surf · destravasurf.com.br · Itacaré, Bahia, Brazil">© 2025 Destrava Surf · destravasurf.com.br · Itacaré, Bahia, Brasil</small>
+  <small>© 2025 Destrava Surf · destravasurf.com.br · Itacaré, Bahia, Brasil</small>
 </footer>
 
 <script>
@@ -1077,44 +1055,6 @@
       ul.style.display = '';
     });
   });
-
-  function toggleLang() {
-    const html = document.documentElement;
-    const btn = document.querySelector('.lang-toggle');
-    const isCurrentlyPt = html.lang !== 'en';
-
-    document.querySelectorAll('[data-en]').forEach(el => {
-      if (isCurrentlyPt) {
-        if (!el.getAttribute('data-pt')) {
-          el.setAttribute('data-pt', el.innerHTML);
-        }
-        el.innerHTML = el.getAttribute('data-en');
-      } else {
-        if (el.getAttribute('data-pt')) {
-          el.innerHTML = el.getAttribute('data-pt');
-        }
-      }
-    });
-
-    if (isCurrentlyPt) {
-      html.lang = 'en';
-      btn.textContent = 'PT';
-      btn.classList.add('active');
-    } else {
-      html.lang = 'pt-BR';
-      btn.textContent = 'EN';
-      btn.classList.remove('active');
-    }
-
-    localStorage.setItem('destrava-lang', html.lang);
-  }
-
-  (function() {
-    const saved = localStorage.getItem('destrava-lang');
-    if (saved === 'en') {
-      toggleLang();
-    }
-  })();
 </script>
 </body>
 </html>
