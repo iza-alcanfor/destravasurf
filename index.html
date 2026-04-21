@@ -626,10 +626,15 @@
       .nav-logo img { filter: brightness(0) !important; }
       nav ul { display: none; }
       .nav-hamburger { display: flex; }
-      #hero .hero-content { padding: 0 24px 36px; }
+      #hero .hero-content {
+        padding: 0 24px 32px;
+        display: flex; flex-direction: column;
+        min-height: 70svh;
+      }
+      .hero-eyebrow { margin-top: auto; }
       .hero-h1 { font-size: clamp(44px, 13vw, 80px); margin-bottom: 16px; }
       .hero-h1 .row2 { font-size: clamp(52px, 16vw, 96px) !important; }
-      .hero-sub { font-size: 18px; margin-bottom: 24px; }
+      .hero-sub { font-size: 18px; margin-bottom: auto; }
       .btn-rosa, .btn-ghost-w { padding: 13px 24px; font-size: 9px; }
       #sobre { grid-template-columns: 1fr; padding: 72px 24px; gap: 40px; }
       .sobre-img { height: 340px; }
@@ -1053,7 +1058,6 @@
 </script>
 </body>
 </html>
-
 
 
 
