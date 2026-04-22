@@ -12,8 +12,8 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --gelo:  #F7F5F2;
-      --rosa:  #F0609E;
-      --rosa-hover: #D8508C;
+      --rosa:  #FF6EB4;
+      --rosa-hover: #E85CA0;
       --fumo:  #2E2A26;
       --cinza: #7A7268;
       --areia: #EDE8E0;
@@ -154,7 +154,7 @@
 
     /* ── TAPE ── */
     .tape {
-      background: var(--rosa);
+      background: linear-gradient(90deg, #FF78BE, var(--rosa), #FF78BE);
       padding: 11px 0; overflow: hidden;
     }
     .tape-track {
@@ -439,7 +439,7 @@
       font-family: 'Space Mono', monospace; font-size: 9px;
       letter-spacing: 0.2em; text-transform: uppercase;
       color: rgba(247,245,242,0.5); text-decoration: none; white-space: nowrap;
-      border-bottom: 1px solid rgba(240,96,158,0.6); padding-bottom: 2px;
+      border-bottom: 1px solid rgba(255,110,180,0.6); padding-bottom: 2px;
       transition: color 0.2s, border-color 0.2s;
     }
     .desconto-strip a:hover { color: white; border-color: white; }
@@ -626,15 +626,10 @@
       .nav-logo img { filter: brightness(0) !important; }
       nav ul { display: none; }
       .nav-hamburger { display: flex; }
-      #hero .hero-content {
-        padding: 0 24px 32px;
-        display: flex; flex-direction: column;
-        min-height: 70svh;
-      }
-      .hero-eyebrow { margin-top: 0; }
-      .hero-h1 { font-size: clamp(44px, 13vw, 80px); margin-bottom: 16px; }
+      #hero .hero-content { padding: 0 24px 56px; }
+      .hero-h1 { font-size: clamp(44px, 13vw, 80px); }
       .hero-h1 .row2 { font-size: clamp(52px, 16vw, 96px) !important; }
-      .hero-sub { font-size: 18px; margin-bottom: auto; }
+      .hero-sub { font-size: 18px; margin-bottom: 32px; }
       .btn-rosa, .btn-ghost-w { padding: 13px 24px; font-size: 9px; }
       #sobre { grid-template-columns: 1fr; padding: 72px 24px; gap: 40px; }
       .sobre-img { height: 340px; }
@@ -742,9 +737,9 @@
   </div>
   <div class="sobre-txt">
     <div class="kicker">Sobre a Destrava</div>
-    <h2 class="section-h2">Surf técnico,<br><em>evolução real.</em></h2>
-    <p>Fundada em 2024 por Salomão Martins, a Destrava nasceu para quem quer evoluir no surf de verdade — entendendo o porquê de cada movimento, trabalhando a própria evolução com consciência, segurança e respeito à natureza.</p>
-    <p>Em Itacaré, as aulas costumam acontecer na Praia da Engenhoca, uma das melhores praias da Bahia para aprender a surfar, com ondas que funcionam tanto na maré seca quanto na maré cheia.</p>
+    <h2 class="section-h2">Mais que uma aula.<br><em>Uma virada.</em></h2>
+    <p>A Destrava foi criada pra quem sempre quis surfar mas ficou na dúvida de onde começar. Nossa missão é simples: fazer você pegar uma onda de verdade — e entender que foi só o começo.</p>
+    <p>Grupos pequenos, método claro, atenção real dentro e fora da água. Em Itacaré, uma das melhores praias do Brasil para aprender.</p>
   </div>
 </section>
 
@@ -754,22 +749,20 @@
     <div class="equipe-foto">
       <img src="images/salomao.jpg" alt="Salomão — Instrutor">
       <div class="nome-tag">
-        <strong>Salomão Martins</strong>
+        <strong>Salomão</strong>
         <span>Instrutor de Surf · Itacaré</span>
       </div>
     </div>
     <div class="equipe-txt">
       <div class="kicker">A equipe</div>
       <h2 class="section-h2">Aprenda com<br><em>quem vive o mar.</em></h2>
-      <p>Salomão Martins é nativo de Itacaré e tem 14 anos de experiência dando aulas de surf. Filho de pescador, carrega um conhecimento profundo sobre o mar e a natureza — e aperfeiçoou a arte de ensinar com paciência, clareza e muita paixão pelo esporte.</p>
-      <p>Com ele, cada aula tem feedback real. Você entende o que está fazendo certo, o que pode melhorar e por quê. Fora da água, Salomão também tem a gastronomia como uma de suas paixões — sua moqueca é famosa entre a galera.</p>
-      <p>Salomão é certificado pela Confederação Brasileira de Surf em duas modalidades: Instrutor de Surf e SurfCoach. Também possui certificação de Salvamento Aquático e Primeiros Socorros pela Salvamar & CBSURF</p>
+      <p>Salomão cresceu em Itacaré rodeado de surf e floresta. Passou anos aperfeiçoando não só sua técnica nas ondas, mas a arte de ensinar — com paciência, clareza e muita paixão pelo esporte.</p>
+      <p>Com ele, cada aula tem feedback real. Você entende o que está fazendo certo, o que pode melhorar e por quê. Sem blá blá blá, só resultado dentro da água.</p>
       <div class="equipe-pills">
-        <span class="pill">14 anos de experiência</span>
+        <span class="pill">Instrutor certificado</span>
         <span class="pill">Nativo de Itacaré</span>
-        <span class="pill">Filho de pescador</span>
+        <span class="pill">Todos os níveis</span>
         <span class="pill">Análise de vídeo</span>
-        <span class="pill">Certificado CBSURF</span>
       </div>
     </div>
   </div>
@@ -796,12 +789,12 @@
     <div class="aula-item">
       <div class="aula-n">03 ——</div>
       <h3>Leitura das Ondas</h3>
-      <p>Entender o mar é essencial no surf. Você aprende a ler a ondas e se posicionar no lineup.</p>
+      <p>Entender o mar é metade do surf. Você aprende a ler o swell e se posicionar no lineup.</p>
     </div>
     <div class="aula-item">
       <div class="aula-n">04 ——</div>
       <h3>Manobras & Evolução</h3>
-      <p>Para quem já pega velocidade: técnicas para cutbacks, batidas e rasgadas. Aprenda a fazer um bottom turn bem feito.</p>
+      <p>Para quem já ficou em pé: primeiras viradas, trimming e os cortes iniciais com método.</p>
     </div>
   </div>
 </section>
@@ -858,8 +851,8 @@
 <!-- PREÇOS -->
 <section id="precos">
   <div class="precos-top">
-    <h2 class="section-h2">Aulas Avulsas<br><em>e Pacotes</em></h2>
-    <p>Tudo negociado pelo WhatsApp — sem formulário, sem complicação.</p>
+    <h2 class="section-h2">Simples,<br><em>honesto.</em></h2>
+    <p>Dois valores, zero enrolação. Tudo negociado pelo WhatsApp — sem formulário, sem complicação.</p>
   </div>
   <div class="cards-row">
     <div class="pcard">
@@ -873,7 +866,7 @@
       </div>
       <hr>
       <ul class="feat-list">
-        <li>Transporte até a praia</li>
+        <li>Instrutor profissional</li>
         <li>Todos os níveis</li>
         <li>Equipamento incluso</li>
         <li>Warm-up na areia</li>
@@ -886,7 +879,7 @@
       <p class="sub">Com filmagem da sessão e análise técnica pós-aula. Você vê exatamente onde evoluir.</p>
       <div class="price-row">
         <span class="price-curr">R$</span>
-        <span class="price-num">280</span>
+        <span class="price-num">250</span>
         <span class="price-unit">/ aula</span>
       </div>
       <hr>
@@ -921,34 +914,34 @@
   <div class="dep-grid">
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
-      <p class="dep-text">A Destrava Surf me trouxe dias incríveis em Itacaré. O professor Salomão é o melhor professor que eu já tive, sua didática é impecável e com ele eu consegui, finalmente, destravar as minhas manobras. As aulas com filmagens são muito boas, inclusive com o drone que captura as paisagens lindas das praias de Itacaré. As vídeo-análises foram extremamente úteis para ver o que eu precisava melhorar para o surfe do dia seguinte. Recomendo demais e com certeza voltarei para fazer mais aulas com eles.</p>
+      <p class="dep-text">Melhor experiência de surf da minha vida. Salomão é incrível — paciente, técnico e cheio de energia. Em dois dias já estava pegando ondas sozinho!</p>
       <div class="dep-autor">
-        <div class="dep-avatar">VM</div>
+        <div class="dep-avatar">AM</div>
         <div>
-          <div class="dep-nome">Vivian Morizono</div>
+          <div class="dep-nome">Ana M.</div>
           <div class="dep-local">São Paulo, SP</div>
         </div>
       </div>
     </div>
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
-      <p class="dep-text">Estou há 1 ano tendo aulas de surf com a Destrava Surf, com o melhor professor, Salomão! Tudo que sei no surf devo a essa grande pessoa que hoje se tornou um grande amigo! Vem pra Destrava!</p>
+      <p class="dep-text">Nunca tinha surfado na vida. Em três dias com o Salomão consegui me levantar na prancha e curtir o mar de Itacaré de um jeito completamente diferente.</p>
       <div class="dep-autor">
-        <div class="dep-avatar">LW</div>
+        <div class="dep-avatar">RP</div>
         <div>
-          <div class="dep-nome">Lucas Wolff</div>
-          <div class="dep-local">Florianópolis, SC</div>
+          <div class="dep-nome">Rafael P.</div>
+          <div class="dep-local">Belo Horizonte, MG</div>
         </div>
       </div>
     </div>
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
-      <p class="dep-text">Alguns diferenciais da Destrava: pontualidade, filmagem (faz toda diferença pra evoluir), possibilidade de variar a praia, tem carro e pode levar o aluno. Fora a resenha garantida!</p>
+      <p class="dep-text">A vídeo análise foi um diferencial enorme. Nunca tinha visto meu próprio surf de fora — entendi exatamente o que corrigir e evoluí muito mais rápido.</p>
       <div class="dep-autor">
-        <div class="dep-avatar">EF</div>
+        <div class="dep-avatar">CL</div>
         <div>
-          <div class="dep-nome">Erika Fiuza</div>
-          <div class="dep-local">Belo Horizonte, MG</div>
+          <div class="dep-nome">Carla L.</div>
+          <div class="dep-local">Rio de Janeiro, RJ</div>
         </div>
       </div>
     </div>
@@ -962,10 +955,10 @@
     <div class="kicker">O destino</div>
     <h2 class="section-h2">Por que Itacaré<br><em>é diferente</em></h2>
     <p>No sul da Bahia, Itacaré combina ondas consistentes, temperatura ideal o ano inteiro e uma natureza que você não encontra em nenhum outro lugar.</p>
-    <p>Praias de fundo de areia, Mata Atlântica chegando até a beira do mar. Aqui o surf é uma experiência completa.</p>
+    <p>Praias de fundo de areia, floresta Atlântica chegando até a beira do mar. Aqui o surf é uma experiência completa.</p>
     <div class="stats-row">
       <div><div class="stat-n">27<em>°C</em></div><div class="stat-lbl">Mar o ano todo</div></div>
-      <div><div class="stat-n">5<em>+</em></div><div class="stat-lbl">Praias de surf</div></div>
+      <div><div class="stat-n">12<em>+</em></div><div class="stat-lbl">Praias de surf</div></div>
       <div><div class="stat-n">365</div><div class="stat-lbl">Dias de ondas</div></div>
     </div>
   </div>
@@ -977,7 +970,7 @@
   <div class="contato-txt">
     <div class="kicker">Vamos surfar?</div>
     <h2 class="section-h2">Pronto pra<br><em>destravar?</em></h2>
-    <p>Manda uma mensagem no WhatsApp — respondemos assim que pudermos e encontramos o melhor dia pra sua aula.</p>
+    <p>Manda uma mensagem no WhatsApp — respondemos rápido e encontramos o melhor dia pra sua aula.</p>
     <a href="https://wa.me/5573998592297?text=Olá!%20Quero%20marcar%20uma%20aula%20de%20surf%20com%20a%20Destrava%20em%20Itacaré." target="_blank" class="wpp-btn">
       <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12.004 2C6.477 2 2 6.477 2 12c0 1.89.525 3.657 1.436 5.168L2 22l4.932-1.416A9.955 9.955 0 0012.004 22C17.523 22 22 17.523 22 12S17.523 2 12.004 2zm0 18.153a8.13 8.13 0 01-4.141-1.131l-.296-.177-3.073.882.847-3.175-.196-.31A8.153 8.153 0 1112.004 20.153z"/></svg>
       Falar no WhatsApp
@@ -985,16 +978,16 @@
   </div>
   <div class="infos">
     <div class="info-row">
-      <div><div class="info-lbl">WhatsApp</div><div class="info-val">+55 73 99859-2297</div><div class="info-sub">Em algumas praias não tem sinal, mas responderemos assim que pudermos</div></div>
+      <div><div class="info-lbl">WhatsApp</div><div class="info-val">+55 73 99859-2297</div><div class="info-sub">Respondemos em até 2h</div></div>
     </div>
     <div class="info-row">
       <div><div class="info-lbl">Localização</div><div class="info-val">Itacaré, Bahia</div><div class="info-sub">Sul da Bahia — Brasil</div></div>
     </div>
     <div class="info-row">
-      <div><div class="info-lbl">Preços</div><div class="info-val">R$ 200 — R$ 280 / aula</div><div class="info-sub">Desconto a partir de 3 aulas</div></div>
+      <div><div class="info-lbl">Preços</div><div class="info-val">R$ 200 — R$ 250 / aula</div><div class="info-sub">Desconto a partir de 3 aulas</div></div>
     </div>
     <div class="info-row">
-      <div><div class="info-lbl">Nível</div><div class="info-val">Todos bem-vindos</div><div class="info-sub">Do iniciante ao avançado</div></div>
+      <div><div class="info-lbl">Nível</div><div class="info-val">Todos bem-vindos</div><div class="info-sub">Do iniciante ao intermediário</div></div>
     </div>
   </div>
 </section>
