@@ -7,7 +7,7 @@
   <title>Destrava Surf — Itacaré, BA</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;700;900&family=Barlow+Condensed:wght@800;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -118,8 +118,13 @@
     .hero-h1 .row1 { display: block; color: var(--rosa); }
     .hero-h1 .row2 {
       display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      font-size: clamp(80px, 11.5vw, 152px);
       -webkit-text-stroke: 2.5px white;
       color: transparent;
+      letter-spacing: 0.06em;
+      line-height: 0.88;
     }
     .hero-sub {
       font-family: 'Cormorant Garamond', serif;
@@ -628,6 +633,7 @@
       }
       .hero-eyebrow { margin-top: 0; }
       .hero-h1 { font-size: clamp(44px, 13vw, 80px); margin-bottom: 16px; }
+      .hero-h1 .row2 { font-size: clamp(52px, 16vw, 96px) !important; }
       .hero-sub { font-size: 18px; margin-bottom: auto; }
       .btn-rosa, .btn-ghost-w { padding: 13px 24px; font-size: 9px; }
       #sobre { grid-template-columns: 1fr; padding: 72px 24px; gap: 40px; }
@@ -664,6 +670,7 @@
     }
     @media (max-width: 480px) {
       .hero-h1 { font-size: clamp(38px, 12vw, 60px); }
+      .hero-h1 .row2 { font-size: clamp(46px, 15vw, 76px) !important; }
       .aulas-grid { grid-template-columns: 1fr; }
       .galeria-grid { grid-template-columns: 1fr !important; grid-auto-rows: 220px !important; }
       .g-item { height: 220px !important; grid-column: 1 !important; }
