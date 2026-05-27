@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destrava — Área do Aluno</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getFirestore, collection, query, where, orderBy, getDocs, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDagqj9lhMhuFaTr_b4EI43akge_rjl5ZU",
+    authDomain: "destravasurf-9dc95.firebaseapp.com",
+    projectId: "destravasurf-9dc95",
+    storageBucket: "destravasurf-9dc95.firebasestorage.app",
+    messagingSenderId: "138704795474",
+    appId: "1:138704795474:web:37c2a1447a2dbc1658ac8b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  window._fb = { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, collection, query, where, orderBy, getDocs, doc, getDoc };
+</script>
+
+<style>
+  :root {
+    --gelo:  #F7F5F2;
+    --rosa:  #F0609E;
+    --rosa-hover: #D8508C;
+    --fumo:  #2E2A26;
+    --cinza: #7A7268;
+    --areia: #EDE8E0;
+    --ocean: #0a4a5e;
+    --ocean-mid: #0f7a8e;
+    --ocean-light: #1ab8c8;
+    --accent: #f0a500;
+    --r: 12px; --rsm: 8px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--gelo); color: var(--fumo);
+    min-height: 100vh; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  body::after {
+    content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px 200px; mix-blend-mode: multiply;
+  }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 24px; background: var(--fumo);
+  }
+  .login-box {
+    width: 100%; max-width: 380px;
+    background: rgba(247,245,242,0.05); border: 1px solid rgba(247,245,242,0.1);
+    border-radius: var(--r); padding: 48px 36px;
+  }
+  .login-logo { font-family: 'Unbounded', sans-serif; font-weight: 900; font-size: 22px; letter-spacing: -0.03em; color: var(--gelo); margin-bottom: 4px; }
+  .login-logo span { color: var(--rosa); }
+  .login-sub { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(247,245,242,0.3); margin-bottom: 36px; }
+  .field-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rosa); margin-bottom: 8px; display: block; }
+  .field-input { width: 100%; padding: 12px 16px; background: rgba(247,245,242,0.06); border: 1px solid rgba(247,245,242,0.12); border-radius: var(--rsm); color: var(--gelo); font-size: 15px; font-family: 'Cormorant Garamond', serif; outline: none; transition: border-color 0.2s; margin-bottom: 18px; }
+  .field-input:focus { border-color: var(--rosa); }
+  .field-input::placeholder { color: rgba(247,245,242,0.25); }
+  .btn-login { width: 100%; padding: 14px; background: var(--rosa); color: white; border: none; border-radius: 100px; cursor: pointer; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; transition: background 0.25s; }
+  .btn-login:hover { background: var(--rosa-hover); }
+  .login-error { font-size: 13px; color: #f07060; margin-top: 14px; text-align: center; display: none; }
+
+  /* ── APP ── */
+  #app { display: none; }
+
+  /* ── TOPBAR ── */
+  .topbar { background: rgba(247,245,242,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(46,42,38,0.08); padding: 0 20px; display: flex; align-items: center; justify-content: space-between; height: 60px; position: sticky; top: 0; z-index: 100; }
+  .topbar-logo { font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 900; letter-spacing: -0.03em; color: var(--fumo); }
+  .topbar-logo span { color: var(--rosa); }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .topbar-name { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cinza); }
+  .btn-signout { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; background: none; border: 1px solid rgba(46,42,38,0.15); color: var(--cinza); padding: 6px 14px; border-radius: 100px; cursor: pointer; transition: all 0.2s; }
+  .btn-signout:hover { border-color: var(--fumo); color: var(--fumo); }
+
+  /* ── HERO ── */
+  .aluno-hero { position: relative; overflow: hidden; padding: 48px 24px 56px; background: var(--fumo); }
+  .aluno-hero::before { content: ''; position: absolute; inset: 0; opacity: 0.04; background: repeating-linear-gradient(-30deg,transparent,transparent 40px,rgba(255,255,255,0.5) 40px,rgba(255,255,255,0.5) 42px); }
+  .aluno-hero::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 48px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 48'%3E%3Cpath d='M0,24 C200,48 400,0 600,24 C800,48 1000,0 1200,24 L1200,48 L0,48 Z' fill='%23F7F5F2'/%3E%3C/svg%3E") no-repeat bottom/cover; z-index: 1; }
+  .hero-inner { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
+  .hero-tag { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(247,245,242,0.4); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+  .hero-tag::before { content: ''; width: 20px; height: 1px; background: var(--rosa); display: block; }
+  .hero-name { font-family: 'Unbounded', sans-serif; font-size: clamp(32px,8vw,60px); font-weight: 900; line-height: 0.9; letter-spacing: -0.03em; color: var(--gelo); margin-bottom: 6px; }
+  .hero-name em { font-family: 'Cormorant Garamond', serif; font-style: italic; font-weight: 300; color: var(--rosa); font-size: 1.05em; }
+  .hero-sub { font-size: 15px; color: rgba(247,245,242,0.4); font-weight: 300; }
+
+  /* ── MAIN ── */
+  .main { max-width: 680px; margin: 0 auto; padding: 28px 16px 80px; }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 7px; margin-bottom: 24px; overflow-x: auto; padding-bottom: 2px; -ms-overflow-style: none; scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn { padding: 8px 18px; border-radius: 100px; white-space: nowrap; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; cursor: pointer; transition: all 0.2s; flex-shrink: 0; background: white; border: 1.5px solid rgba(46,42,38,0.1); color: var(--cinza); }
+  .tab-btn.active { background: var(--rosa); border-color: var(--rosa); color: white; }
+  .tab-btn:hover:not(.active) { border-color: var(--fumo); color: var(--fumo); }
+
+  /* ── LOADING / EMPTY ── */
+  .loading { text-align: center; padding: 48px 0; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cinza); }
+  .empty { text-align: center; padding: 48px 24px; background: white; border: 1px solid rgba(46,42,38,0.07); border-radius: var(--r); }
+  .empty p { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cinza); margin-bottom: 8px; }
+  .empty small { font-size: 15px; color: var(--cinza); font-style: italic; }
+
+  /* ── KICKER ── */
+  .kicker { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--rosa); margin-bottom: 14px; display: flex; align-items: center; gap: 10px; }
+  .kicker::before { content: ''; width: 16px; height: 1px; background: var(--rosa); display: block; }
+
+  /* ── PERFIL CARD ── */
+  .perfil-card { background: white; border: 1px solid rgba(46,42,38,0.08); border-radius: var(--r); overflow: hidden; margin-bottom: 20px; animation: fadeUp 0.3s ease both; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  .perfil-header { padding: 28px 24px 20px; border-bottom: 1px solid rgba(46,42,38,0.06); }
+  .perfil-nivel { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rosa); margin-bottom: 10px; }
+  .perfil-nome-big { font-family: 'Unbounded', sans-serif; font-size: clamp(20px,5vw,32px); font-weight: 900; letter-spacing: -0.03em; color: var(--fumo); line-height: 1.05; margin-bottom: 4px; }
+  .perfil-body { padding: 20px 24px; }
+  .obj-visao { margin-bottom: 18px; }
+  .obj-visao-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cinza); margin-bottom: 6px; }
+  .obj-visao-text { font-size: 18px; line-height: 1.55; color: var(--fumo); font-weight: 400; }
+  .obj-visao-text.longo { font-size: 20px; font-family: 'Unbounded', sans-serif; font-weight: 700; letter-spacing: -0.02em; color: var(--fumo); }
+  .obj-visao-text.curto { font-size: 16px; color: var(--cinza); font-style: italic; }
+  .areas-section { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(46,42,38,0.06); }
+  .areas-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+  .area-chip { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.08em; padding: 5px 13px; border-radius: 100px; background: rgba(240,96,158,0.08); border: 1px solid rgba(240,96,158,0.25); color: var(--rosa); }
+  .nota-tecnico { margin-top: 18px; padding: 16px 18px; background: var(--areia); border-radius: var(--rsm); border-left: 3px solid var(--rosa); }
+  .nota-tecnico-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--rosa); margin-bottom: 8px; }
+  .nota-tecnico-text { font-size: 16px; line-height: 1.7; color: var(--cinza); font-style: italic; }
+
+  /* ── TREINO CARD ── */
+  .treino-card { background: white; border: 1px solid rgba(46,42,38,0.08); border-radius: var(--r); overflow: hidden; margin-bottom: 20px; animation: fadeUp 0.35s ease both; }
+  .treino-top { padding: 22px 22px 16px; border-bottom: 1px solid rgba(46,42,38,0.06); background: var(--areia); }
+  .treino-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--cinza); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .badge-novo { background: var(--rosa); color: white; font-size: 7px; padding: 2px 8px; border-radius: 100px; letter-spacing: 0.1em; }
+  .treino-data { font-family: 'Unbounded', sans-serif; font-size: 18px; font-weight: 900; letter-spacing: -0.03em; color: var(--fumo); margin-bottom: 8px; }
+  .treino-meta-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mpill { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.08em; padding: 4px 11px; border-radius: 100px; background: white; border: 1px solid rgba(46,42,38,0.1); color: var(--cinza); }
+  .mpill.intens-leve  { background: rgba(26,138,90,0.08); border-color: rgba(26,138,90,0.3); color: #1a6a44; }
+  .mpill.intens-medio { background: rgba(240,165,0,0.1); border-color: rgba(240,165,0,0.35); color: #a06e00; }
+  .mpill.intens-forte { background: rgba(200,75,58,0.08); border-color: rgba(200,75,58,0.3); color: #9a2a1a; }
+  .treino-body { padding: 18px 22px 20px; }
+  .treino-section { margin-bottom: 18px; }
+  .treino-section:last-child { margin-bottom: 0; }
+  .ts-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--cinza); margin-bottom: 10px; }
+  .obj-output { display: grid; gap: 6px; }
+  .obj-out-item { display: flex; gap: 10px; align-items: flex-start; padding: 10px 13px; background: var(--areia); border-radius: var(--rsm); }
+  .obj-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--rosa); flex-shrink: 0; margin-top: 6px; }
+  .obj-out-name { font-size: 15px; font-weight: 500; color: var(--fumo); }
+  .obj-out-hint { font-size: 12px; color: var(--cinza); margin-top: 2px; font-style: italic; }
+  .man-out { display: flex; flex-wrap: wrap; gap: 6px; }
+  .man-chip { padding: 5px 12px; border-radius: 100px; background: rgba(240,165,0,0.1); border: 1px solid rgba(240,165,0,0.3); font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.08em; color: #a06e00; }
+  .text-block { font-size: 16px; line-height: 1.7; color: var(--cinza); font-style: italic; padding: 12px 14px; background: var(--areia); border-left: 2px solid var(--rosa); border-radius: 0 var(--rsm) var(--rsm) 0; }
+  .treino-footer { padding: 13px 22px; border-top: 1px solid rgba(46,42,38,0.06); display: flex; justify-content: flex-end; }
+  .btn-download { display: inline-flex; align-items: center; gap: 7px; font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; background: var(--areia); color: var(--cinza); border: 1px solid rgba(46,42,38,0.12); padding: 8px 16px; border-radius: 100px; cursor: pointer; transition: all 0.2s; }
+  .btn-download:hover { background: var(--fumo); color: white; border-color: var(--fumo); }
+
+  /* ── METAS CARD ── */
+  .metas-card { background: white; border: 1px solid rgba(46,42,38,0.08); border-radius: var(--r); padding: 22px 22px; margin-bottom: 16px; animation: fadeUp 0.35s ease both; }
+  .metas-grid { display: grid; gap: 12px; margin-top: 16px; }
+  .meta-item { padding: 16px 18px; background: var(--areia); border-radius: var(--rsm); }
+  .meta-periodo { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--rosa); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+  .meta-periodo::before { content: ''; width: 12px; height: 1px; background: var(--rosa); display: block; }
+  .meta-texto { font-size: 16px; line-height: 1.7; color: var(--fumo); font-weight: 300; }
+
+  /* ── HISTÓRICO ── */
+  .hist-item { background: white; border: 1px solid rgba(46,42,38,0.08); border-radius: var(--r); padding: 16px 18px; margin-bottom: 9px; cursor: pointer; transition: all 0.2s; animation: fadeUp 0.3s ease both; display: flex; align-items: center; gap: 14px; }
+  .hist-item:hover { border-color: var(--rosa); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(240,96,158,0.08); }
+  .hist-data-box { flex-shrink: 0; text-align: center; min-width: 46px; padding: 8px 10px; background: var(--areia); border-radius: var(--rsm); }
+  .hist-dia { font-family: 'Unbounded', sans-serif; font-size: 20px; font-weight: 900; color: var(--fumo); line-height: 1; }
+  .hist-mes { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cinza); margin-top: 2px; }
+  .hist-info { flex: 1; }
+  .hist-praia { font-family: 'Unbounded', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: -0.02em; color: var(--fumo); margin-bottom: 4px; }
+  .hist-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .hist-pill { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.08em; padding: 3px 9px; border-radius: 100px; background: var(--areia); color: var(--cinza); }
+  .hist-arrow { font-size: 16px; color: var(--cinza); transition: color 0.2s; flex-shrink: 0; }
+  .hist-item:hover .hist-arrow { color: var(--rosa); }
+
+  /* ── MODAL ── */
+  .modal-overlay { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(46,42,38,0.6); backdrop-filter: blur(4px); align-items: flex-end; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal-box { width: 100%; max-width: 680px; background: var(--gelo); border-radius: var(--r) var(--r) 0 0; border-top: 3px solid var(--rosa); max-height: 88vh; overflow-y: auto; padding: 24px 16px 48px; animation: slideUp 0.35s cubic-bezier(0.16,1,0.3,1); }
+  @keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .modal-close-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  .modal-close-lbl { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cinza); }
+  .modal-close-btn { background: var(--areia); border: none; color: var(--cinza); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 15px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+  .modal-close-btn:hover { background: var(--fumo); color: white; }
+
+  /* ── TOAST ── */
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1a8a5a; color: white; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; padding: 12px 26px; border-radius: 100px; transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); z-index: 9998; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media(max-width:480px) {
+    .aluno-hero { padding: 36px 16px 48px; }
+    .main { padding: 20px 12px 60px; }
+    .modal-box { padding: 20px 12px 40px; }
+    .treino-body, .treino-top { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">DESTRAVA<span>.</span></div>
+    <div class="login-sub">Área do Aluno</div>
+    <label class="field-label">Email</label>
+    <input class="field-input" type="email" id="email" placeholder="seu@email.com">
+    <label class="field-label">Senha</label>
+    <input class="field-input" type="password" id="senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn-login" onclick="login()">Entrar</button>
+    <div class="login-error" id="login-err">Email ou senha incorretos.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">DESTRAVA<span>.</span></div>
+    <div class="topbar-right">
+      <span class="topbar-name" id="topbar-name"></span>
+      <button class="btn-signout" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <div class="aluno-hero">
+    <div class="hero-inner">
+      <div class="hero-tag">Área do Aluno · Destrava Surf · Itacaré</div>
+      <div class="hero-name" id="hero-name">OLÁ,<br><em id="hero-firstname">…</em></div>
+      <div class="hero-sub" id="hero-sub">Carregando…</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="showTab('perfil',this)">Meu perfil</button>
+      <button class="tab-btn" onclick="showTab('treino',this)">Treino da semana</button>
+      <button class="tab-btn" onclick="showTab('metas',this)">Metas</button>
+      <button class="tab-btn" onclick="showTab('historico',this)">Histórico</button>
+    </div>
+
+    <div id="tab-perfil"><div class="loading" id="loading-perfil">Carregando perfil…</div><div id="perfil-content"></div></div>
+    <div id="tab-treino" style="display:none"><div class="loading" id="loading-treino">Carregando treino…</div><div id="treino-content"></div></div>
+    <div id="tab-metas" style="display:none"><div class="loading" id="loading-metas">Carregando metas…</div><div id="metas-content"></div></div>
+    <div id="tab-historico" style="display:none"><div class="loading" id="loading-hist">Carregando histórico…</div><div id="historico-content"></div></div>
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="fecharModal(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-close-bar">
+      <span class="modal-close-lbl">Plano de Treino</span>
+      <button class="modal-close-btn" onclick="fecharModal()">✕</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let ALUNO_ID = null, ALUNO_NOME = '', PERFIL = null, TREINOS = [];
+
+async function login() {
+  const { auth, signInWithEmailAndPassword } = window._fb;
+  try { await signInWithEmailAndPassword(auth, document.getElementById('email').value.trim(), document.getElementById('senha').value); }
+  catch(e) { document.getElementById('login-err').style.display='block'; }
+}
+async function sair() { await window._fb.signOut(window._fb.auth); }
+
+window.addEventListener('DOMContentLoaded', () => {
+  const { auth, onAuthStateChanged } = window._fb;
+  onAuthStateChanged(auth, async user => {
+    if (user) {
+      document.getElementById('login-screen').style.display='none';
+      document.getElementById('app').style.display='block';
+      await inicializar(user);
+    } else {
+      document.getElementById('login-screen').style.display='flex';
+      document.getElementById('app').style.display='none';
+      ALUNO_ID=null; TREINOS=[];
+    }
+  });
+});
+
+async function inicializar(user) {
+  const { db, collection, query, where, getDocs, orderBy } = window._fb;
+  const snap = await getDocs(query(collection(db,'alunos'), where('email','==',user.email)));
+  if (snap.empty) { document.getElementById('hero-sub').textContent='Cadastro não encontrado. Fala com o Salomão.'; return; }
+  const alunoDoc = snap.docs[0];
+  ALUNO_ID = alunoDoc.id;
+  const data = alunoDoc.data();
+  ALUNO_NOME = data.nome;
+  PERFIL = data.perfil || null;
+  const firstName = ALUNO_NOME.split(' ')[0];
+  document.getElementById('topbar-name').textContent = ALUNO_NOME;
+  document.getElementById('hero-firstname').textContent = firstName;
+  const treinos = await getDocs(query(collection(db,'treinos'), where('alunoId','==',ALUNO_ID), orderBy('data','desc')));
+  TREINOS = treinos.docs.map(d => ({ id: d.id, ...d.data() }));
+  const total = TREINOS.length;
+  document.getElementById('hero-sub').textContent = `${total} sessão${total!==1?'s':''} registrada${total!==1?'s':''} com o Salomão`;
+  renderPerfil();
+}
+
+function showTab(tab, btn) {
+  ['perfil','treino','metas','historico'].forEach(t => document.getElementById('tab-'+t).style.display = t===tab?'block':'none');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (tab==='treino') renderTreino();
+  if (tab==='metas') renderMetas();
+  if (tab==='historico') renderHistorico();
+}
+
+// ── PERFIL ──
+function renderPerfil() {
+  document.getElementById('loading-perfil').style.display='none';
+  const el = document.getElementById('perfil-content');
+  if (!PERFIL) {
+    el.innerHTML=`<div class="empty"><p>Perfil não configurado</p><small>O Salomão vai preencher seu perfil em breve.</small></div>`; return;
+  }
+  const areasHTML = PERFIL.areas && PERFIL.areas.length>0
+    ? `<div class="areas-section">
+        <div class="ts-label">O que estamos trabalhando</div>
+        <div class="areas-chips">${PERFIL.areas.map(a=>`<span class="area-chip">${a}</span>`).join('')}</div>
+       </div>` : '';
+  const notaHTML = PERFIL.notaTecnico
+    ? `<div class="nota-tecnico">
+        <div class="nota-tecnico-label">📝 Nota do Salomão</div>
+        <div class="nota-tecnico-text">${PERFIL.notaTecnico}</div>
+       </div>` : '';
+  el.innerHTML=`
+    <div class="perfil-card">
+      <div class="perfil-header">
+        ${PERFIL.nivel ? `<div class="perfil-nivel">${PERFIL.nivel}</div>` : ''}
+        <div class="perfil-nome-big">${ALUNO_NOME}</div>
+      </div>
+      <div class="perfil-body">
+        ${PERFIL.objLongo ? `<div class="obj-visao" style="margin-bottom:14px">
+          <div class="obj-visao-label">🏆 Objetivo de longo prazo</div>
+          <div class="obj-visao-text longo">${PERFIL.objLongo}</div>
+        </div>` : ''}
+        ${PERFIL.objCurto ? `<div class="obj-visao">
+          <div class="obj-visao-label">🎯 Próxima conquista</div>
+          <div class="obj-visao-text curto">${PERFIL.objCurto}</div>
+        </div>` : ''}
+        ${areasHTML}
+        ${notaHTML}
+      </div>
+    </div>`;
+}
+
+// ── TREINO ──
+function renderTreino() {
+  document.getElementById('loading-treino').style.display='none';
+  const el = document.getElementById('treino-content');
+  if (TREINOS.length===0) { el.innerHTML=`<div class="empty"><p>Nenhum treino ainda</p><small>O Salomão vai postar seu próximo treino em breve.</small></div>`; return; }
+  el.innerHTML = renderTreinoCard(TREINOS[0], true);
+}
+
+function renderTreinoCard(t, isLatest=false) {
+  const dataFmt = formatarData(t.data);
+  const isNovo = isLatest && isRecente(t.data);
+  const intensKey = t.intensidade ? t.intensidade.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'') : '';
+  const objsHTML = t.objetivos&&t.objetivos.length>0 ? `<div class="treino-section"><div class="ts-label">Objetivos da sessão</div><div class="obj-output">${t.objetivos.map(o=>`<div class="obj-out-item"><div class="obj-dot"></div><div><div class="obj-out-name">${o.name}</div>${o.hint?`<div class="obj-out-hint">${o.hint}</div>`:''}</div></div>`).join('')}</div></div>` : '';
+  const manHTML = t.manobras&&t.manobras.length>0 ? `<div class="treino-section"><div class="ts-label">Manobras do dia</div><div class="man-out">${t.manobras.map(m=>`<span class="man-chip">${m}</span>`).join('')}</div></div>` : '';
+  const focoHTML = t.focoMental ? `<div class="treino-section"><div class="ts-label">Foco mental</div><div class="text-block">${t.focoMental}</div></div>` : '';
+  const obsHTML = t.observacoes ? `<div class="treino-section"><div class="ts-label">Observações extras</div><div class="text-block">${t.observacoes}</div></div>` : '';
+  return `<div class="treino-card">
+    <div class="treino-top">
+      <div class="treino-label">Plano de Treino · Itacaré ${isNovo?'<span class="badge-novo">NOVO</span>':''}</div>
+      <div class="treino-data">${dataFmt}</div>
+      <div class="treino-meta-pills">
+        <span class="mpill">📍 ${t.praia||'—'}</span>
+        <span class="mpill">🌊 ${t.mar||'—'}</span>
+        <span class="mpill">Maré ${t.mare||'—'}</span>
+        ${t.intensidade?`<span class="mpill intens-${intensKey}">${t.intensidade==='Leve'?'🟢':t.intensidade==='Médio'?'🟡':'🔴'} ${t.intensidade}</span>`:''}
+      </div>
+    </div>
+    <div class="treino-body">${objsHTML}${manHTML}${focoHTML}${obsHTML}</div>
+    <div class="treino-footer"><button class="btn-download" onclick="downloadTreino('${t.id}')">↓ Salvar plano</button></div>
+  </div>`;
+}
+
+// ── METAS ──
+function renderMetas() {
+  document.getElementById('loading-metas').style.display='none';
+  const el = document.getElementById('metas-content');
+  const comMetas = TREINOS.find(t => t.metaSemana||t.metaMes||t.metaAno);
+  if (!comMetas) { el.innerHTML=`<div class="empty"><p>Sem metas definidas</p><small>O Salomão vai definir suas metas em breve.</small></div>`; return; }
+  const items=[];
+  if(comMetas.metaSemana) items.push({periodo:'Esta semana',texto:comMetas.metaSemana,icon:'📅'});
+  if(comMetas.metaMes)    items.push({periodo:'Este mês',   texto:comMetas.metaMes,    icon:'🗓'});
+  if(comMetas.metaAno)    items.push({periodo:'Este ano',   texto:comMetas.metaAno,    icon:'🏆'});
+  el.innerHTML=`<div class="metas-card">
+    <div class="kicker">Metas definidas pelo Salomão</div>
+    <div style="font-size:13px;color:var(--cinza);font-style:italic">Atualizado em ${formatarData(comMetas.data)}</div>
+    <div class="metas-grid">${items.map(item=>`<div class="meta-item"><div class="meta-periodo">${item.icon} ${item.periodo}</div><div class="meta-texto">${item.texto}</div></div>`).join('')}</div>
+  </div>`;
+}
+
+// ── HISTÓRICO ──
+function renderHistorico() {
+  document.getElementById('loading-hist').style.display='none';
+  const el = document.getElementById('historico-content');
+  if(TREINOS.length===0){el.innerHTML=`<div class="empty"><p>Sem histórico</p><small>Cada sessão vai aparecer aqui.</small></div>`;return;}
+  const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  el.innerHTML=TREINOS.map((t,i)=>{
+    const[ano,mes,dia]=t.data.split('-');
+    return `<div class="hist-item" onclick="abrirModal('${t.id}')" style="animation-delay:${i*0.04}s">
+      <div class="hist-data-box"><div class="hist-dia">${dia}</div><div class="hist-mes">${meses[parseInt(mes)-1]}</div></div>
+      <div class="hist-info">
+        <div class="hist-praia">${t.praia||'Sessão'}</div>
+        <div class="hist-pills">
+          <span class="hist-pill">${t.mar||''}</span>
+          ${t.intensidade?`<span class="hist-pill">${t.intensidade}</span>`:''}
+          ${t.objetivos&&t.objetivos.length>0?`<span class="hist-pill">${t.objetivos.length} obj.</span>`:''}
+        </div>
+      </div>
+      <div class="hist-arrow">→</div>
+    </div>`;
+  }).join('');
+}
+
+// ── MODAL ──
+function abrirModal(id) {
+  const t = TREINOS.find(t=>t.id===id); if(!t) return;
+  document.getElementById('modal-body').innerHTML=renderTreinoCard(t);
+  document.getElementById('modal').classList.add('open');
+}
+function fecharModal(e) {
+  if(!e||e.target===document.getElementById('modal')) document.getElementById('modal').classList.remove('open');
+}
+
+// ── DOWNLOAD ──
+function downloadTreino(id) {
+  const t = TREINOS.find(t=>t.id===id); if(!t) return;
+  let txt=`🏄 PLANO DE TREINO — ${ALUNO_NOME.toUpperCase()}\n${formatarData(t.data)} · Destrava Surf, Itacaré\n${'━'.repeat(36)}\n\n`;
+  txt+=`📍 Praia: ${t.praia||'—'}\n🌊 Mar: ${t.mar||'—'}\n🌊 Maré: ${t.mare||'—'}\n`;
+  if(t.intensidade) txt+=`⚡ Intensidade: ${t.intensidade}\n`;
+  if(t.objetivos&&t.objetivos.length>0){txt+=`\n🎯 OBJETIVOS:\n`;t.objetivos.forEach(o=>{txt+=`• ${o.name} — ${o.hint}\n`;});}
+  if(t.manobras&&t.manobras.length>0){txt+=`\n🤙 MANOBRAS:\n`;t.manobras.forEach(m=>{txt+=`• ${m}\n`;});}
+  if(t.focoMental) txt+=`\n🧠 FOCO MENTAL:\n${t.focoMental}\n`;
+  if(t.metaSemana) txt+=`\n📅 META DA SEMANA:\n${t.metaSemana}\n`;
+  if(t.metaMes)    txt+=`\n🗓 META DO MÊS:\n${t.metaMes}\n`;
+  if(t.metaAno)    txt+=`\n🏆 META DO ANO:\n${t.metaAno}\n`;
+  if(t.observacoes) txt+=`\n📝 OBSERVAÇÕES:\n${t.observacoes}\n`;
+  txt+=`\nBom treino! 🤙`;
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));
+  a.download=`destrava-treino-${t.data}.txt`; a.click();
+  showToast('Plano salvo!');
+}
+
+// ── HELPERS ──
+function formatarData(s) {
+  if(!s) return '—';
+  const[ano,mes,dia]=s.split('-');
+  const meses=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+  return `${parseInt(dia)} de ${meses[parseInt(mes)-1]} de ${ano}`;
+}
+function isRecente(s) { return s && (new Date()-new Date(s))/(1000*60*60*24)<=7; }
+function showToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+</script>
+</body>
+</html>
