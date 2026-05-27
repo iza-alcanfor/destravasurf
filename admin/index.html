@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destrava — Painel do Instrutor</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+  import { getFirestore, collection, addDoc, getDocs, doc, setDoc, getDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDagqj9lhMhuFaTr_b4EI43akge_rjl5ZU",
+    authDomain: "destravasurf-9dc95.firebaseapp.com",
+    projectId: "destravasurf-9dc95",
+    storageBucket: "destravasurf-9dc95.firebasestorage.app",
+    messagingSenderId: "138704795474",
+    appId: "1:138704795474:web:37c2a1447a2dbc1658ac8b"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+  window._fb = { auth, db, signInWithEmailAndPassword, signOut, onAuthStateChanged, collection, addDoc, getDocs, doc, setDoc, getDoc, query, orderBy, serverTimestamp };
+</script>
+
+<style>
+  :root {
+    --gelo:  #F7F5F2;
+    --rosa:  #F0609E;
+    --rosa-hover: #D8508C;
+    --fumo:  #2E2A26;
+    --cinza: #7A7268;
+    --areia: #EDE8E0;
+    --ocean-light: #1ab8c8;
+    --accent: #f0a500;
+    --r: 10px; --rsm: 6px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--gelo);
+    color: var(--fumo);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 200px 200px; mix-blend-mode: multiply;
+  }
+
+  /* ── LOGIN ── */
+  #login-screen {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center; padding: 24px;
+    background: var(--fumo);
+  }
+  .login-box {
+    width: 100%; max-width: 380px;
+    background: rgba(247,245,242,0.05);
+    border: 1px solid rgba(247,245,242,0.1);
+    border-radius: var(--r); padding: 48px 36px;
+  }
+  .login-logo {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 900; font-size: 22px; letter-spacing: -0.03em;
+    color: var(--gelo); margin-bottom: 4px;
+  }
+  .login-logo span { color: var(--rosa); }
+  .login-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(247,245,242,0.3); margin-bottom: 36px;
+  }
+  .field-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--rosa); margin-bottom: 8px; display: block;
+  }
+  .field-input {
+    width: 100%; padding: 12px 16px;
+    background: rgba(247,245,242,0.06);
+    border: 1px solid rgba(247,245,242,0.12);
+    border-radius: var(--rsm);
+    color: var(--gelo); font-size: 15px; font-family: 'Cormorant Garamond', serif;
+    outline: none; transition: border-color 0.2s; margin-bottom: 18px;
+  }
+  .field-input:focus { border-color: var(--rosa); }
+  .field-input::placeholder { color: rgba(247,245,242,0.25); }
+  .btn-login {
+    width: 100%; padding: 14px; background: var(--rosa); color: white;
+    border: none; border-radius: 100px; cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    transition: background 0.25s;
+  }
+  .btn-login:hover { background: var(--rosa-hover); }
+  .login-error { font-size: 13px; color: #f07060; margin-top: 14px; text-align: center; display: none; }
+
+  /* ── APP ── */
+  #app { display: none; }
+
+  /* ── TOPBAR ── */
+  .topbar {
+    background: rgba(247,245,242,0.96); backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(46,42,38,0.08);
+    padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
+    height: 60px; position: sticky; top: 0; z-index: 100;
+  }
+  .topbar-logo {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 14px; font-weight: 900; letter-spacing: -0.03em; color: var(--fumo);
+  }
+  .topbar-logo span { color: var(--rosa); }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .topbar-tabs { display: flex; gap: 6px; }
+  .topbar-tab {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid rgba(46,42,38,0.15);
+    color: var(--cinza); padding: 6px 14px; border-radius: 100px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .topbar-tab.active { background: var(--rosa); border-color: var(--rosa); color: white; }
+  .topbar-tab:hover:not(.active) { border-color: var(--fumo); color: var(--fumo); }
+  .btn-signout {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase;
+    background: none; border: 1px solid rgba(46,42,38,0.15);
+    color: var(--cinza); padding: 6px 14px; border-radius: 100px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .btn-signout:hover { border-color: var(--fumo); color: var(--fumo); }
+
+  /* ── PANELS ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .main-wrap { max-width: 760px; margin: 0 auto; padding: 32px 20px 80px; }
+
+  /* ── PAGE TITLE ── */
+  .page-title { padding: 24px 0 28px; border-bottom: 1px solid rgba(46,42,38,0.08); margin-bottom: 28px; }
+  .page-title h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(22px,5vw,36px); font-weight: 900;
+    letter-spacing: -0.03em; line-height: 1.05; color: var(--fumo);
+  }
+  .page-title h1 em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 300; color: var(--rosa); font-size: 1.1em;
+  }
+  .page-title p { font-size: 15px; color: var(--cinza); font-weight: 300; margin-top: 8px; }
+
+  /* ── KICKER ── */
+  .kicker {
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--rosa); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .kicker::before { content: ''; width: 18px; height: 1px; background: var(--rosa); display: block; }
+
+  /* ── STEP CARD ── */
+  .step-card {
+    background: white;
+    border: 1px solid rgba(46,42,38,0.08);
+    border-radius: var(--r); padding: 22px 20px;
+    margin-bottom: 14px;
+    animation: fadeUp 0.3s ease both;
+  }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+  .step-card:nth-child(1){animation-delay:.04s} .step-card:nth-child(2){animation-delay:.08s}
+  .step-card:nth-child(3){animation-delay:.12s} .step-card:nth-child(4){animation-delay:.16s}
+  .step-card:nth-child(5){animation-delay:.20s} .step-card:nth-child(6){animation-delay:.24s}
+  .step-card:nth-child(7){animation-delay:.28s} .step-card:nth-child(8){animation-delay:.32s}
+  .step-card:nth-child(9){animation-delay:.36s} .step-card:nth-child(10){animation-delay:.40s}
+
+  /* ── SEC HEAD ── */
+  .sec-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .sec-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--rosa); color: white;
+    font-family: 'Space Mono', monospace; font-size: 10px;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .sec-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--cinza);
+  }
+
+  /* ── INPUTS ── */
+  .field-input-light {
+    width: 100%; padding: 11px 14px;
+    background: var(--gelo);
+    border: 1px solid rgba(46,42,38,0.12);
+    border-radius: var(--rsm);
+    color: var(--fumo); font-size: 15px; font-family: 'Cormorant Garamond', serif;
+    outline: none; transition: border-color 0.2s; margin-bottom: 10px;
+  }
+  .field-input-light:focus { border-color: var(--rosa); }
+  .field-input-light::placeholder { color: rgba(46,42,38,0.3); font-style: italic; }
+  .aluno-select {
+    width: 100%; padding: 11px 14px;
+    background: var(--gelo);
+    border: 1px solid rgba(46,42,38,0.12);
+    border-radius: var(--rsm);
+    color: var(--fumo); font-size: 15px; font-family: 'Cormorant Garamond', serif;
+    outline: none; cursor: pointer; appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7268' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 14px center;
+    transition: border-color 0.2s; margin-bottom: 10px;
+  }
+  .aluno-select:focus { border-color: var(--rosa); }
+  input[type=date] {
+    width: 100%; padding: 11px 14px;
+    background: var(--gelo); border: 1px solid rgba(46,42,38,0.12);
+    border-radius: var(--rsm); color: var(--fumo); font-size: 15px;
+    font-family: 'Cormorant Garamond', serif; outline: none; transition: border-color 0.2s;
+  }
+  input[type=date]:focus { border-color: var(--rosa); }
+  .notas-box {
+    width: 100%; padding: 12px 14px;
+    background: var(--gelo); border: 1px solid rgba(46,42,38,0.1);
+    border-radius: var(--rsm); color: var(--fumo); font-size: 15px; line-height: 1.65;
+    font-family: 'Cormorant Garamond', serif; resize: vertical; min-height: 80px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .notas-box:focus { border-color: var(--rosa); }
+  .notas-box::placeholder { color: rgba(46,42,38,0.3); font-style: italic; }
+
+  /* ── OPT BUTTONS ── */
+  .opts-grid { display: grid; gap: 7px; }
+  .opts-grid.cols2 { grid-template-columns: 1fr 1fr; }
+  .opts-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
+  .opt-btn {
+    padding: 10px 13px; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.1); border-radius: var(--rsm);
+    cursor: pointer; transition: all 0.18s; text-align: left; color: var(--fumo);
+    font-family: 'Cormorant Garamond', serif;
+  }
+  .opt-btn:hover { border-color: rgba(46,42,38,0.25); background: var(--areia); }
+  .opt-btn.sel { background: rgba(240,96,158,0.08); border-color: var(--rosa); }
+  .opt-btn .ol { font-size: 14px; font-weight: 500; display: block; }
+  .opt-btn .os { font-size: 11px; color: var(--cinza); margin-top: 2px; display: block; }
+  .opt-btn.sel .os { color: rgba(240,96,158,0.7); }
+
+  /* ── MARE ── */
+  .mare-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; }
+  .mare-btn {
+    padding: 12px 8px; text-align: center; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.1); border-radius: var(--rsm);
+    cursor: pointer; transition: all 0.18s; color: var(--fumo); font-family: 'Cormorant Garamond', serif;
+  }
+  .mare-btn:hover { border-color: rgba(46,42,38,0.25); background: var(--areia); }
+  .mare-btn.sel { background: rgba(240,96,158,0.08); border-color: var(--rosa); }
+  .mare-icon { font-size: 20px; display: block; margin-bottom: 4px; }
+  .mare-label { font-size: 12px; font-weight: 500; display: block; }
+  .mare-sub { font-size: 10px; color: var(--cinza); display: block; margin-top: 2px; }
+
+  /* ── OBJ LIST ── */
+  .obj-list { display: grid; gap: 6px; }
+  .obj-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 10px 13px; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.1); border-radius: var(--rsm);
+    cursor: pointer; transition: all 0.18s; color: var(--fumo); font-family: 'Cormorant Garamond', serif;
+  }
+  .obj-row:hover { border-color: rgba(46,42,38,0.22); background: var(--areia); }
+  .obj-row.sel { background: rgba(240,96,158,0.07); border-color: var(--rosa); }
+  .obj-row.highlighted { border-color: rgba(240,96,158,0.4); background: rgba(240,96,158,0.04); }
+  .obj-check {
+    width: 17px; height: 17px; border-radius: 4px;
+    border: 1.5px solid rgba(46,42,38,0.2); flex-shrink: 0; margin-top: 2px;
+    display: flex; align-items: center; justify-content: center; transition: all 0.15s;
+  }
+  .obj-row.sel .obj-check { background: var(--rosa); border-color: var(--rosa); }
+  .obj-check::after {
+    content: ''; display: none; width: 4px; height: 8px;
+    border-right: 2px solid white; border-bottom: 2px solid white;
+    transform: rotate(45deg) translate(-1px,-1px);
+  }
+  .obj-row.sel .obj-check::after { display: block; }
+  .obj-txt { flex: 1; }
+  .obj-name { font-size: 14px; font-weight: 500; }
+  .obj-hint { font-size: 11px; color: var(--cinza); margin-top: 2px; font-style: italic; }
+  .obj-badge {
+    font-family: 'Space Mono', monospace; font-size: 7px; letter-spacing: 0.1em;
+    background: var(--rosa); color: white; padding: 2px 7px; border-radius: 100px;
+    flex-shrink: 0; margin-top: 3px; white-space: nowrap;
+  }
+
+  /* ── MANOBRAS ── */
+  .man-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+  .man-tag {
+    padding: 7px 14px; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.12); border-radius: 20px;
+    font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s;
+    color: var(--cinza); font-family: 'Cormorant Garamond', serif;
+  }
+  .man-tag:hover { background: var(--areia); color: var(--fumo); }
+  .man-tag.sel { background: rgba(240,165,0,0.12); border-color: var(--accent); color: #a06e00; }
+
+  /* ── INTENSIDADE ── */
+  .intens-row { display: flex; gap: 7px; }
+  .intens-btn {
+    flex: 1; padding: 12px 8px; text-align: center; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.1); border-radius: var(--rsm);
+    cursor: pointer; transition: all 0.18s; color: var(--fumo);
+    font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+  }
+  .intens-btn:hover { background: var(--areia); }
+  .intens-btn.sel.leve  { background: rgba(26,138,90,0.1); border-color: #1a8a5a; color: #1a6a44; }
+  .intens-btn.sel.medio { background: rgba(240,165,0,0.12); border-color: var(--accent); color: #a06e00; }
+  .intens-btn.sel.forte { background: rgba(200,75,58,0.1); border-color: #c84b3a; color: #9a2a1a; }
+
+  /* ── METAS TABS ── */
+  .metas-tabs { display: flex; gap: 7px; margin-bottom: 14px; }
+  .meta-tab {
+    padding: 7px 16px; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.1); border-radius: 100px;
+    font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.18s; color: var(--cinza);
+  }
+  .meta-tab.sel { background: rgba(26,184,200,0.1); border-color: var(--ocean-light); color: #0a7a8e; }
+  .metas-panel { display: none; }
+  .metas-panel.active { display: block; }
+
+  /* ── DIVIDER / SAVE ── */
+  .divider { height: 1px; background: rgba(46,42,38,0.08); margin: 24px 0; }
+  .save-btn {
+    width: 100%; padding: 17px; background: var(--rosa); color: white; border: none;
+    border-radius: 100px; cursor: pointer; font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    transition: background 0.25s, transform 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .save-btn:hover { background: var(--rosa-hover); transform: translateY(-2px); }
+  .save-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  /* ── PERFIL PANEL ── */
+  .nivel-row { display: flex; gap: 7px; margin-bottom: 14px; }
+  .nivel-btn {
+    flex: 1; padding: 10px 8px; text-align: center; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.1); border-radius: var(--rsm);
+    cursor: pointer; transition: all 0.18s; color: var(--fumo);
+    font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .nivel-btn:hover { background: var(--areia); }
+  .nivel-btn.sel { background: rgba(240,96,158,0.08); border-color: var(--rosa); color: var(--rosa); }
+
+  /* ── AREAS DE DEV ── */
+  .areas-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+  .area-tag {
+    padding: 7px 14px; background: var(--gelo);
+    border: 1.5px solid rgba(46,42,38,0.12); border-radius: 20px;
+    font-size: 13px; cursor: pointer; transition: all 0.15s;
+    color: var(--cinza); font-family: 'Cormorant Garamond', serif;
+  }
+  .area-tag:hover { background: var(--areia); color: var(--fumo); }
+  .area-tag.sel { background: rgba(240,96,158,0.1); border-color: var(--rosa); color: var(--rosa); }
+
+  /* ── ALUNO CARDS LIST ── */
+  .alunos-list { display: grid; gap: 10px; }
+  .aluno-card {
+    background: white; border: 1px solid rgba(46,42,38,0.08); border-radius: var(--r);
+    padding: 18px 20px; display: flex; align-items: center; gap: 16px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .aluno-card:hover { border-color: var(--rosa); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(240,96,158,0.1); }
+  .aluno-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--areia); display: flex; align-items: center; justify-content: center;
+    font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 900;
+    color: var(--cinza); flex-shrink: 0;
+  }
+  .aluno-info { flex: 1; }
+  .aluno-card-nome {
+    font-family: 'Unbounded', sans-serif; font-size: 14px; font-weight: 700;
+    letter-spacing: -0.02em; color: var(--fumo); margin-bottom: 3px;
+  }
+  .aluno-card-nivel {
+    font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cinza);
+  }
+  .aluno-card-arrow { color: var(--cinza); font-size: 18px; transition: color 0.2s; }
+  .aluno-card:hover .aluno-card-arrow { color: var(--rosa); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: #1a8a5a; color: white;
+    font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em;
+    padding: 12px 26px; border-radius: 100px;
+    transition: transform 0.35s cubic-bezier(0.16,1,0.3,1); z-index: 9998; white-space: nowrap;
+  }
+  .toast.err { background: #c84b3a; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  @media(max-width:600px) {
+    .opts-grid.cols3 { grid-template-columns: 1fr 1fr; }
+    .intens-row { flex-direction: column; }
+    .nivel-row { flex-wrap: wrap; }
+    .topbar-tabs { gap: 4px; }
+    .topbar-tab { padding: 5px 10px; font-size: 7px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">DESTRAVA<span>.</span></div>
+    <div class="login-sub">Painel do Instrutor</div>
+    <label class="field-label">Email</label>
+    <input class="field-input" type="email" id="email" placeholder="seu@email.com">
+    <label class="field-label">Senha</label>
+    <input class="field-input" type="password" id="senha" placeholder="••••••••" onkeydown="if(event.key==='Enter')login()">
+    <button class="btn-login" onclick="login()">Entrar</button>
+    <div class="login-error" id="login-error">Email ou senha incorretos.</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-logo">DESTRAVA<span>.</span></div>
+    <div class="topbar-right">
+      <div class="topbar-tabs">
+        <button class="topbar-tab active" onclick="showPanel('treino',this)">Novo Treino</button>
+        <button class="topbar-tab" onclick="showPanel('perfil',this)">Perfil do Aluno</button>
+        <button class="topbar-tab" onclick="showPanel('alunos',this)">Alunos</button>
+      </div>
+      <button class="btn-signout" onclick="sair()">Sair</button>
+    </div>
+  </div>
+
+  <!-- PAINEL: NOVO TREINO -->
+  <div class="panel active" id="panel-treino">
+    <div class="main-wrap">
+      <div class="page-title">
+        <h1>Novo<br><em>Plano de Treino</em></h1>
+        <p>Preencha a ficha e salve — o aluno acessa na hora.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">1</div><div class="sec-title">Aluno & Data</div></div>
+        <select class="aluno-select" id="sel-aluno" onchange="carregarPerfilAluno()">
+          <option value="">Selecione o aluno…</option>
+        </select>
+        <input type="date" id="data-sessao">
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">2</div><div class="sec-title">Praia</div></div>
+        <div class="opts-grid cols2" id="grid-praia">
+          <button class="opt-btn" onclick="sel('praia','Engenhoca',this)"><span class="ol">Engenhoca</span><span class="os">Pico principal</span></button>
+          <button class="opt-btn" onclick="sel('praia','Tiririca',this)"><span class="ol">Tiririca</span><span class="os">Ondas mais fechadas</span></button>
+          <button class="opt-btn" onclick="sel('praia','Ribeira',this)"><span class="ol">Ribeira</span><span class="os">Boa pra iniciantes</span></button>
+          <button class="opt-btn" onclick="sel('praia','Itacarézinho',this)"><span class="ol">Itacarézinho</span><span class="os">Mar aberto</span></button>
+          <button class="opt-btn" onclick="sel('praia','Outra',this)"><span class="ol">Outra</span><span class="os">Ver observações</span></button>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">3</div><div class="sec-title">Condição do mar</div></div>
+        <div class="opts-grid cols3" id="grid-mar">
+          <button class="opt-btn" onclick="sel('mar','Fraco',this)"><span class="ol">Fraco</span><span class="os">Molinho</span></button>
+          <button class="opt-btn" onclick="sel('mar','Médio',this)"><span class="ol">Médio</span><span class="os">1–1.5m</span></button>
+          <button class="opt-btn" onclick="sel('mar','Forte',this)"><span class="ol">Forte</span><span class="os">2m+</span></button>
+          <button class="opt-btn" onclick="sel('mar','On-shore',this)"><span class="ol">On-shore</span><span class="os">Vento de frente</span></button>
+          <button class="opt-btn" onclick="sel('mar','Off-shore',this)"><span class="ol">Off-shore</span><span class="os">Vento de costa</span></button>
+          <button class="opt-btn" onclick="sel('mar','Cross-shore',this)"><span class="ol">Cross-shore</span><span class="os">Vento lateral</span></button>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">4</div><div class="sec-title">Maré</div></div>
+        <div class="mare-grid" id="grid-mare">
+          <button class="mare-btn" onclick="sel('mare','Seca',this)"><span class="mare-icon">🌊</span><span class="mare-label">Seca</span><span class="mare-sub">Maré baixa</span></button>
+          <button class="mare-btn" onclick="sel('mare','Meia',this)"><span class="mare-icon">🌊🌊</span><span class="mare-label">Meia</span><span class="mare-sub">Enchendo/vazando</span></button>
+          <button class="mare-btn" onclick="sel('mare','Cheia',this)"><span class="mare-icon">🌊🌊🌊</span><span class="mare-label">Cheia</span><span class="mare-sub">Maré alta</span></button>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">5</div><div class="sec-title">Intensidade</div></div>
+        <div class="intens-row" id="grid-intens">
+          <button class="intens-btn leve" onclick="selIntens('Leve',this)">🟢 Leve<br><small style="font-size:8px;opacity:0.6;font-family:serif">Técnica / Recuperação</small></button>
+          <button class="intens-btn medio" onclick="selIntens('Médio',this)">🟡 Médio<br><small style="font-size:8px;opacity:0.6;font-family:serif">Progressão controlada</small></button>
+          <button class="intens-btn forte" onclick="selIntens('Forte',this)">🔴 Forte<br><small style="font-size:8px;opacity:0.6;font-family:serif">Alta exigência</small></button>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">6</div><div class="sec-title">Objetivos da sessão <span style="font-size:10px;color:var(--cinza);font-family:serif;font-weight:300;text-transform:none;letter-spacing:0">(máx. 4 — áreas prioritárias do aluno marcadas em rosa)</span></div></div>
+        <div class="obj-list" id="obj-list">
+          <div class="obj-row" onclick="togObj(this,'Abrir a base','Postura larga em todas as manobras')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Abrir a base</div><div class="obj-hint">Postura larga em todas as manobras</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Melhorar o pop-up','Levantada mais rápida e fluida')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Melhorar o pop-up</div><div class="obj-hint">Levantada mais rápida e fluida</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Não insistir em ondas sem potencial','Seletividade — largar a onda ruim sem culpa')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Não insistir em ondas sem potencial</div><div class="obj-hint">Seletividade — largar a onda ruim sem culpa</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Aumentar o arco da rasgada','Amplitude e velocidade na rasgada')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Aumentar o arco da rasgada</div><div class="obj-hint">Amplitude e velocidade na rasgada</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Na batida, chegar mais cedo','Timing de antecipação no lábio')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Na batida, chegar mais cedo</div><div class="obj-hint">Timing de antecipação no lábio</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Cavar, abrir base e voar no aéreo','Progressão aérea — cavar fundo e lançar')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Cavar, abrir base e voar no aéreo</div><div class="obj-hint">Progressão aérea — cavar fundo e lançar</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Leitura de onda','Posicionar no outside e ler o pico')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Leitura de onda</div><div class="obj-hint">Posicionar no outside e ler o pico</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Remada mais eficiente','Corpo alinhado, braçadas profundas')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Remada mais eficiente</div><div class="obj-hint">Corpo alinhado, braçadas profundas</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Mentalidade de competidor','Surfar cada onda como se valesse nota')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Mentalidade de competidor</div><div class="obj-hint">Surfar cada onda como se valesse nota</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Variações de manobra na mesma onda','Encadear 2–3 manobras diferentes por onda')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Variações de manobra na mesma onda</div><div class="obj-hint">Encadear 2–3 manobras diferentes por onda</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Bottom turn sólido','Base do surf — gerar velocidade pra próxima manobra')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Bottom turn sólido</div><div class="obj-hint">Base do surf — gerar velocidade pra próxima manobra</div></div></div>
+          <div class="obj-row" onclick="togObj(this,'Posicionamento no pico','Estar no lugar certo na hora certa')"><div class="obj-check"></div><div class="obj-txt"><div class="obj-name">Posicionamento no pico</div><div class="obj-hint">Estar no lugar certo na hora certa</div></div></div>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">7</div><div class="sec-title">Manobras do dia</div></div>
+        <div class="man-wrap" id="man-wrap">
+          <button class="man-tag" onclick="togMan(this,'Remada')">Remada</button>
+          <button class="man-tag" onclick="togMan(this,'Pop-up')">Pop-up</button>
+          <button class="man-tag" onclick="togMan(this,'Bottom turn')">Bottom turn</button>
+          <button class="man-tag" onclick="togMan(this,'Cutback')">Cutback</button>
+          <button class="man-tag" onclick="togMan(this,'Rasgada')">Rasgada</button>
+          <button class="man-tag" onclick="togMan(this,'Snap')">Snap</button>
+          <button class="man-tag" onclick="togMan(this,'Floater')">Floater</button>
+          <button class="man-tag" onclick="togMan(this,'Aéreo')">Aéreo</button>
+          <button class="man-tag" onclick="togMan(this,'Off-the-lip')">Off-the-lip</button>
+          <button class="man-tag" onclick="togMan(this,'Tubo')">Tubo</button>
+          <button class="man-tag" onclick="togMan(this,'Carve')">Carve</button>
+          <button class="man-tag" onclick="togMan(this,'Duck dive')">Duck dive</button>
+          <button class="man-tag" onclick="togMan(this,'Reentry')">Reentry</button>
+          <button class="man-tag" onclick="togMan(this,'360°')">360°</button>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">8</div><div class="sec-title">Metas do período</div></div>
+        <div class="metas-tabs">
+          <button class="meta-tab sel" onclick="showMeta('semana',this)">Semana</button>
+          <button class="meta-tab" onclick="showMeta('mes',this)">Mês</button>
+          <button class="meta-tab" onclick="showMeta('ano',this)">Ano</button>
+        </div>
+        <div class="metas-panel active" id="panel-semana">
+          <textarea class="notas-box" id="meta-semana" placeholder="O que focar essa semana…"></textarea>
+        </div>
+        <div class="metas-panel" id="panel-mes">
+          <textarea class="notas-box" id="meta-mes" placeholder="Meta do mês…"></textarea>
+        </div>
+        <div class="metas-panel" id="panel-ano">
+          <textarea class="notas-box" id="meta-ano" placeholder="Visão do ano…"></textarea>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">9</div><div class="sec-title">Foco mental</div></div>
+        <textarea class="notas-box" id="foco-mental" placeholder="Ex: Comprometer com o plano antes de entrar na água. Decidir a sequência antes de pegar cada onda…"></textarea>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">10</div><div class="sec-title">Observações extras</div></div>
+        <textarea class="notas-box" id="obs-extra" placeholder="Exercícios, referências de vídeo, ajustes para o dia…"></textarea>
+      </div>
+
+      <div class="divider"></div>
+      <button class="save-btn" id="save-btn" onclick="salvarTreino()"><span id="save-label">Salvar plano para o aluno</span><span>→</span></button>
+    </div>
+  </div>
+
+  <!-- PAINEL: PERFIL DO ALUNO -->
+  <div class="panel" id="panel-perfil">
+    <div class="main-wrap">
+      <div class="page-title">
+        <h1>Perfil<br><em>do Aluno</em></h1>
+        <p>Cadastre ou atualize o perfil completo — aparece na área do aluno.</p>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">1</div><div class="sec-title">Aluno</div></div>
+        <select class="aluno-select" id="perfil-sel-aluno" onchange="carregarPerfil()">
+          <option value="">Selecione o aluno…</option>
+        </select>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">2</div><div class="sec-title">Nível atual</div></div>
+        <div class="nivel-row" id="grid-nivel">
+          <button class="nivel-btn" onclick="selNivel('Iniciante',this)">Iniciante</button>
+          <button class="nivel-btn" onclick="selNivel('Intermediário',this)">Intermediário</button>
+          <button class="nivel-btn" onclick="selNivel('Avançado',this)">Avançado</button>
+          <button class="nivel-btn" onclick="selNivel('Competidor',this)">Competidor</button>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">3</div><div class="sec-title">Objetivo de longo prazo</div></div>
+        <input class="field-input-light" type="text" id="obj-longo" placeholder="Ex: Ser campeã brasileira de surf">
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">4</div><div class="sec-title">Objetivo de curto prazo</div></div>
+        <input class="field-input-light" type="text" id="obj-curto" placeholder="Ex: Chegar na semi final da próxima etapa do Brasileiro">
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">5</div><div class="sec-title">Áreas de desenvolvimento prioritárias</div></div>
+        <p style="font-size:13px;color:var(--cinza);margin-bottom:12px;font-style:italic">Essas áreas serão destacadas na ficha de treino como prioridade para este aluno.</p>
+        <div class="areas-wrap" id="areas-wrap">
+          <button class="area-tag" onclick="togArea(this,'Abrir a base')">Abrir a base</button>
+          <button class="area-tag" onclick="togArea(this,'Melhorar o pop-up')">Melhorar o pop-up</button>
+          <button class="area-tag" onclick="togArea(this,'Leitura de onda')">Leitura de onda</button>
+          <button class="area-tag" onclick="togArea(this,'Remada mais eficiente')">Remada mais eficiente</button>
+          <button class="area-tag" onclick="togArea(this,'Aumentar o arco da rasgada')">Aumentar o arco da rasgada</button>
+          <button class="area-tag" onclick="togArea(this,'Na batida, chegar mais cedo')">Na batida, chegar mais cedo</button>
+          <button class="area-tag" onclick="togArea(this,'Cavar, abrir base e voar no aéreo')">Cavar, abrir base e voar no aéreo</button>
+          <button class="area-tag" onclick="togArea(this,'Mentalidade de competidor')">Mentalidade de competidor</button>
+          <button class="area-tag" onclick="togArea(this,'Variações de manobra na mesma onda')">Variações de manobra</button>
+          <button class="area-tag" onclick="togArea(this,'Bottom turn sólido')">Bottom turn sólido</button>
+          <button class="area-tag" onclick="togArea(this,'Posicionamento no pico')">Posicionamento no pico</button>
+          <button class="area-tag" onclick="togArea(this,'Não insistir em ondas sem potencial')">Seletividade</button>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="sec-head"><div class="sec-num">6</div><div class="sec-title">Nota do técnico</div></div>
+        <textarea class="notas-box" id="nota-tecnico" placeholder="Uma mensagem pessoal para o aluno — evolução recente, pontos fortes, o que vem por aí…" style="min-height:110px"></textarea>
+      </div>
+
+      <div class="divider"></div>
+      <button class="save-btn" id="save-perfil-btn" onclick="salvarPerfil()"><span id="save-perfil-label">Salvar perfil do aluno</span><span>→</span></button>
+    </div>
+  </div>
+
+  <!-- PAINEL: ALUNOS -->
+  <div class="panel" id="panel-alunos">
+    <div class="main-wrap">
+      <div class="page-title">
+        <h1>Seus<br><em>Alunos</em></h1>
+        <p>Visão geral de todos os alunos cadastrados.</p>
+      </div>
+      <div class="alunos-list" id="alunos-list">
+        <div style="font-family:'Space Mono',monospace;font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--cinza);padding:20px 0;text-align:center">Carregando…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const S = { praia:null, mar:null, mare:null, intens:null, objetivos:[], manobras:[] };
+const P = { nivel:null, areas:[] };
+let ALUNOS = [];
+
+// ── PANEL SWITCH ──
+function showPanel(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.topbar-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+  if (name === 'alunos') renderAlunosList();
+}
+
+// ── LOGIN ──
+async function login() {
+  const { auth, signInWithEmailAndPassword } = window._fb;
+  try {
+    await signInWithEmailAndPassword(auth, document.getElementById('email').value.trim(), document.getElementById('senha').value);
+  } catch(e) { document.getElementById('login-error').style.display = 'block'; }
+}
+async function sair() { await window._fb.signOut(window._fb.auth); }
+
+// ── AUTH STATE ──
+window.addEventListener('DOMContentLoaded', () => {
+  const { auth, onAuthStateChanged } = window._fb;
+  onAuthStateChanged(auth, async user => {
+    if (user) {
+      document.getElementById('login-screen').style.display = 'none';
+      document.getElementById('app').style.display = 'block';
+      await carregarAlunos();
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('data-sessao').value = today;
+    } else {
+      document.getElementById('login-screen').style.display = 'flex';
+      document.getElementById('app').style.display = 'none';
+    }
+  });
+});
+
+// ── LOAD ALUNOS ──
+async function carregarAlunos() {
+  const { db, getDocs, collection } = window._fb;
+  const snap = await getDocs(collection(db, 'alunos'));
+  ALUNOS = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  ['sel-aluno','perfil-sel-aluno'].forEach(id => {
+    const s = document.getElementById(id);
+    const cur = s.value;
+    while(s.options.length > 1) s.remove(1);
+    ALUNOS.forEach(a => {
+      const opt = document.createElement('option');
+      opt.value = a.id; opt.textContent = a.nome; s.appendChild(opt);
+    });
+    if (cur) s.value = cur;
+  });
+}
+
+// ── HIGHLIGHT AREAS NO TREINO ──
+async function carregarPerfilAluno() {
+  const id = document.getElementById('sel-aluno').value;
+  if (!id) return;
+  const { db, doc, getDoc } = window._fb;
+  const snap = await getDoc(doc(db, 'alunos', id));
+  const perfil = snap.exists() ? snap.data().perfil : null;
+  const areas = perfil?.areas || [];
+  document.querySelectorAll('#obj-list .obj-row').forEach(row => {
+    const name = row.querySelector('.obj-name').textContent;
+    const badge = row.querySelector('.obj-badge');
+    if (areas.includes(name)) {
+      row.classList.add('highlighted');
+      if (!badge) {
+        const b = document.createElement('span');
+        b.className = 'obj-badge'; b.textContent = 'Prioritário';
+        row.appendChild(b);
+      }
+    } else {
+      row.classList.remove('highlighted');
+      if (badge) badge.remove();
+    }
+  });
+}
+
+// ── LOAD PERFIL ──
+async function carregarPerfil() {
+  const id = document.getElementById('perfil-sel-aluno').value;
+  if (!id) return;
+  const { db, doc, getDoc } = window._fb;
+  const snap = await getDoc(doc(db, 'alunos', id));
+  const perfil = snap.exists() ? snap.data().perfil : null;
+  if (!perfil) { P.nivel=null; P.areas=[]; return; }
+  P.nivel = perfil.nivel || null;
+  P.areas = perfil.areas || [];
+  document.getElementById('obj-longo').value = perfil.objLongo || '';
+  document.getElementById('obj-curto').value = perfil.objCurto || '';
+  document.getElementById('nota-tecnico').value = perfil.notaTecnico || '';
+  document.querySelectorAll('.nivel-btn').forEach(b => { b.classList.toggle('sel', b.textContent === P.nivel); });
+  document.querySelectorAll('.area-tag').forEach(b => { b.classList.toggle('sel', P.areas.includes(b.textContent)); });
+}
+
+// ── RENDER ALUNOS LIST ──
+function renderAlunosList() {
+  const el = document.getElementById('alunos-list');
+  if (ALUNOS.length === 0) { el.innerHTML = '<p style="color:var(--cinza);font-style:italic;padding:20px 0">Nenhum aluno cadastrado ainda.</p>'; return; }
+  el.innerHTML = ALUNOS.map(a => `
+    <div class="aluno-card">
+      <div class="aluno-avatar">${a.nome.charAt(0)}</div>
+      <div class="aluno-info">
+        <div class="aluno-card-nome">${a.nome}</div>
+        <div class="aluno-card-nivel">${a.perfil?.nivel || 'Sem nível definido'}</div>
+      </div>
+      <div class="aluno-card-arrow">→</div>
+    </div>`).join('');
+}
+
+// ── SELECTION HELPERS ──
+function sel(field, val, el) {
+  S[field] = val;
+  el.closest('.opts-grid, .mare-grid').querySelectorAll('.opt-btn, .mare-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selIntens(val, el) {
+  S.intens = val;
+  document.querySelectorAll('.intens-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function selNivel(val, el) {
+  P.nivel = val;
+  document.querySelectorAll('.nivel-btn').forEach(b => b.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function togObj(el, name, hint) {
+  const idx = S.objetivos.findIndex(o => o.name === name);
+  if (idx > -1) { S.objetivos.splice(idx,1); el.classList.remove('sel'); }
+  else {
+    if (S.objetivos.length >= 4) { showToast('Máximo 4 objetivos', true); return; }
+    S.objetivos.push({ name, hint }); el.classList.add('sel');
+  }
+}
+function togMan(el, name) {
+  const idx = S.manobras.indexOf(name);
+  if (idx > -1) { S.manobras.splice(idx,1); el.classList.remove('sel'); }
+  else { S.manobras.push(name); el.classList.add('sel'); }
+}
+function togArea(el, name) {
+  const idx = P.areas.indexOf(name);
+  if (idx > -1) { P.areas.splice(idx,1); el.classList.remove('sel'); }
+  else { P.areas.push(name); el.classList.add('sel'); }
+}
+function showMeta(tab, el) {
+  document.querySelectorAll('.metas-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.meta-tab').forEach(t => t.classList.remove('sel'));
+  document.getElementById('panel-'+tab).classList.add('active'); el.classList.add('sel');
+}
+
+// ── SAVE TREINO ──
+async function salvarTreino() {
+  const alunoId = document.getElementById('sel-aluno').value;
+  const data = document.getElementById('data-sessao').value;
+  if (!alunoId) { showToast('Selecione um aluno', true); return; }
+  if (!data) { showToast('Informe a data', true); return; }
+  if (!S.praia) { showToast('Selecione a praia', true); return; }
+  if (!S.mar)   { showToast('Selecione a condição do mar', true); return; }
+  if (!S.mare)  { showToast('Selecione a maré', true); return; }
+  if (S.objetivos.length === 0) { showToast('Selecione pelo menos 1 objetivo', true); return; }
+  const btn = document.getElementById('save-btn');
+  btn.disabled = true; document.getElementById('save-label').textContent = 'Salvando…';
+  const { db, collection, addDoc, serverTimestamp } = window._fb;
+  try {
+    await addDoc(collection(db, 'treinos'), {
+      alunoId, data, praia: S.praia, mar: S.mar, mare: S.mare,
+      intensidade: S.intens, objetivos: S.objetivos, manobras: S.manobras,
+      metaSemana: document.getElementById('meta-semana').value.trim(),
+      metaMes: document.getElementById('meta-mes').value.trim(),
+      metaAno: document.getElementById('meta-ano').value.trim(),
+      focoMental: document.getElementById('foco-mental').value.trim(),
+      observacoes: document.getElementById('obs-extra').value.trim(),
+      criadoEm: serverTimestamp()
+    });
+    showToast('✓ Plano salvo!'); resetarTreino();
+  } catch(e) { showToast('Erro ao salvar', true); console.error(e); }
+  btn.disabled = false; document.getElementById('save-label').textContent = 'Salvar plano para o aluno';
+}
+
+// ── SAVE PERFIL ──
+async function salvarPerfil() {
+  const id = document.getElementById('perfil-sel-aluno').value;
+  if (!id) { showToast('Selecione um aluno', true); return; }
+  const btn = document.getElementById('save-perfil-btn');
+  btn.disabled = true; document.getElementById('save-perfil-label').textContent = 'Salvando…';
+  const { db, doc, setDoc } = window._fb;
+  try {
+    await setDoc(doc(db, 'alunos', id), {
+      perfil: {
+        nivel: P.nivel,
+        objLongo: document.getElementById('obj-longo').value.trim(),
+        objCurto: document.getElementById('obj-curto').value.trim(),
+        areas: P.areas,
+        notaTecnico: document.getElementById('nota-tecnico').value.trim()
+      }
+    }, { merge: true });
+    showToast('✓ Perfil salvo!');
+  } catch(e) { showToast('Erro ao salvar', true); console.error(e); }
+  btn.disabled = false; document.getElementById('save-perfil-label').textContent = 'Salvar perfil do aluno';
+}
+
+function resetarTreino() {
+  S.praia=null; S.mar=null; S.mare=null; S.intens=null; S.objetivos=[]; S.manobras=[];
+  document.querySelectorAll('.opt-btn,.mare-btn,.obj-row,.man-tag,.intens-btn').forEach(el => el.classList.remove('sel'));
+  ['meta-semana','meta-mes','meta-ano','foco-mental','obs-extra'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('sel-aluno').value='';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showToast(msg, err=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast'+(err?' err':'');
+  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000);
+}
+</script>
+</body>
+</html>
