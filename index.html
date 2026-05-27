@@ -142,6 +142,26 @@
       padding: 10px 24px; border-radius: 100px;
     }
     .nav-cta:hover { background: var(--rosa-hover) !important; color: white !important; }
+    .nav-aluno {
+  opacity: 1 !important;
+  border: 1.5px solid rgba(247,245,242,0.4) !important;
+  color: var(--gelo) !important;
+  padding: 8px 20px; border-radius: 100px;
+}
+nav.scrolled .nav-aluno {
+  border-color: rgba(46,42,38,0.25) !important;
+  color: var(--fumo) !important;
+}
+.nav-aluno:hover {
+  border-color: white !important;
+  background: rgba(247,245,242,0.12) !important;
+  color: white !important;
+}
+nav.scrolled .nav-aluno:hover {
+  border-color: var(--fumo) !important;
+  background: rgba(46,42,38,0.05) !important;
+  color: var(--fumo) !important;
+}
     .nav-right { display: flex; align-items: center; gap: 14px; }
     .nav-hamburger {
       display: none; flex-direction: column; gap: 5px;
@@ -785,6 +805,7 @@
     <li><a href="#aulas" data-en="Lessons">Aulas</a></li>
     <li><a href="#galeria" data-en="Gallery">Galeria</a></li>
     <li><a href="#precos" data-en="Prices">Preços</a></li>
+    <li><a href="/area-do-aluno" class="nav-aluno" data-en="Student Area">Área do Aluno</a></li>
     <li><a href="#contato" class="nav-cta" data-en="Book Now">Reservar</a></li>
   </ul>
   <div class="nav-right">
@@ -1100,6 +1121,7 @@
     <li><a href="#galeria" data-en="Gallery">Galeria</a></li>
     <li><a href="#itacare">Itacaré</a></li>
     <li><a href="#contato" data-en="Contact">Contato</a></li>
+    <li><a href="/area-do-aluno" data-en="Student Area">Área do Aluno</a></li>
     <li><a href="https://www.instagram.com/destravasurf/" target="_blank">↗ Instagram</a></li>
   </ul>
   <small>© 2025 Destrava Surf · destravasurf.com.br · Itacaré, Bahia, Brasil</small>
