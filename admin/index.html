@@ -840,25 +840,24 @@ async function criarAluno(){
   const btn=document.getElementById('btn-criar-aluno'); btn.disabled=true;
   document.getElementById('label-criar-aluno').textContent='Criando...';
   try{
-    const apiKey='AIzaSyDagqj9lhMhuFaTr_b4EI43akge_rjl5ZU';
-    const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+apiKey,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email:email,password:senha,returnSecureToken:true})
-    });
-    const json=await res.json();
-    if(json.error){ showToast('Erro: '+json.error.message,true); throw new Error(json.error.message); }
-    const uid=json.localId;
-    const adminEmail=window._adminEmail;
-    const adminSenha=window._adminSenha;
-    const {signInWithEmailAndPassword,signOut}=window._fb;
-    await signOut(window._fb.auth);
-    await signInWithEmailAndPassword(window._fb.auth,adminEmail,adminSenha);
+    // Passo 1: salva no Firestore ANTES de criar no Auth (admin ainda logado)
     const db=window._fb.db;
     const docRef=window._fb.doc;
     const setDoc=window._fb.setDoc;
     const id=nome.toLowerCase().split(' ').join('_').replace(/[^a-z0-9_]/g,'');
-    await setDoc(docRef(db,'alunos',id),{nome:nome,email:email,uid:uid});
+    // uid provisorio — sera atualizado quando o aluno logar pela primeira vez
+    await setDoc(docRef(db,'alunos',id),{nome:nome,email:email,uid:'pendente_'+id});
+    // Passo 2: cria o usuario no Auth via REST (nao afeta Firestore pois ja salvamos)
+    const apiKey='AIzaSyDagqj9lhMhuFaTr_b4EI43akge_rjl5ZU';
+    const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+apiKey,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email:email,password:senha,returnSecureToken:false})
+    });
+    const json=await res.json();
+    if(json.error && json.error.message!=='EMAIL_EXISTS'){
+      showToast('Erro no Auth: '+json.error.message,true);
+    }
     document.getElementById('novo-nome').value='';
     document.getElementById('novo-email').value='';
     document.getElementById('novo-senha').value='';
@@ -866,8 +865,7 @@ async function criarAluno(){
     renderAlunosList();
     showToast('Aluno cadastrado!');
   } catch(e){
-    if(e.message==='EMAIL_EXISTS') showToast('Email ja cadastrado',true);
-    else showToast('Erro: '+e.message,true);
+    showToast('Erro: '+e.message,true);
     console.error(e);
   }
   btn.disabled=false;
