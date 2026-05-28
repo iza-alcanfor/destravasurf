@@ -832,21 +832,38 @@ async function criarAluno(){
   const email=document.getElementById('novo-email').value.trim();
   const senha=document.getElementById('novo-senha').value;
   if(!nome||!email||!senha){ showToast('Preencha todos os campos',true); return; }
-  if(senha.length<6){ showToast('Senha mínimo 6 caracteres',true); return; }
+  if(senha.length<6){ showToast('Senha minimo 6 caracteres',true); return; }
   const btn=document.getElementById('btn-criar-aluno'); btn.disabled=true;
-  document.getElementById('label-criar-aluno').textContent='Criando…';
+  document.getElementById('label-criar-aluno').textContent='Criando...';
   try{
     const apiKey='AIzaSyDagqj9lhMhuFaTr_b4EI43akge_rjl5ZU';
-    const res=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,{
+    const res=await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+apiKey,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({email,password:senha,returnSecureToken:true})
+      body:JSON.stringify({email:email,password:senha,returnSecureToken:true})
     });
     const json=await res.json();
     if(json.error){ showToast('Erro: '+json.error.message,true); throw new Error(json.error.message); }
     const uid=json.localId;
-    const {db,doc,setDoc}=window._fb;
-    const id=nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_');
+    const db=window._fb.db;
+    const docRef=window._fb.doc;
+    const setDoc=window._fb.setDoc;
+    const id=nome.toLowerCase().split(' ').join('_').replace(/[^a-z0-9_]/g,'');
+    await setDoc(docRef(db,'alunos',id),{nome:nome,email:email,uid:uid});
+    document.getElementById('novo-nome').value='';
+    document.getElementById('novo-email').value='';
+    document.getElementById('novo-senha').value='';
+    await carregarAlunos();
+    renderAlunosList();
+    showToast('Aluno cadastrado!');
+  } catch(e){
+    if(e.message==='EMAIL_EXISTS') showToast('Email ja cadastrado',true);
+    else showToast('Erro: '+e.message,true);
+    console.error(e);
+  }
+  btn.disabled=false;
+  document.getElementById('label-criar-aluno').textContent='Criar conta do aluno';
+}
 
 function renderAlunosList(){
   const el=document.getElementById('alunos-list');
