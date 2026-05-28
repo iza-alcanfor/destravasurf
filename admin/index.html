@@ -576,7 +576,11 @@ function showPanel(name,btn){
 // ── LOGIN ──
 async function login(){
   const {auth,signInWithEmailAndPassword}=window._fb;
-  try{ await signInWithEmailAndPassword(auth,document.getElementById('email').value.trim(),document.getElementById('senha').value); }
+  try{
+    await signInWithEmailAndPassword(auth,document.getElementById('email').value.trim(),document.getElementById('senha').value);
+    window._adminEmail=document.getElementById('email').value.trim();
+    window._adminSenha=document.getElementById('senha').value;
+  }
   catch(e){ document.getElementById('login-error').style.display='block'; }
 }
 async function sair(){ await window._fb.signOut(window._fb.auth); }
@@ -845,6 +849,11 @@ async function criarAluno(){
     const json=await res.json();
     if(json.error){ showToast('Erro: '+json.error.message,true); throw new Error(json.error.message); }
     const uid=json.localId;
+    const adminEmail=window._adminEmail;
+    const adminSenha=window._adminSenha;
+    const {signInWithEmailAndPassword,signOut}=window._fb;
+    await signOut(window._fb.auth);
+    await signInWithEmailAndPassword(window._fb.auth,adminEmail,adminSenha);
     const db=window._fb.db;
     const docRef=window._fb.doc;
     const setDoc=window._fb.setDoc;
