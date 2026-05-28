@@ -836,27 +836,17 @@ async function criarAluno(){
   const btn=document.getElementById('btn-criar-aluno'); btn.disabled=true;
   document.getElementById('label-criar-aluno').textContent='Criando…';
   try{
-    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
-    const { getAuth: getAuth2, createUserWithEmailAndPassword: createUser2 } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    const apiKey='AIzaSyDagqj9lhMhuFaTr_b4EI43akge_rjl5ZU';
+    const res=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${apiKey}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:senha,returnSecureToken:true})
+    });
+    const json=await res.json();
+    if(json.error){ showToast('Erro: '+json.error.message,true); throw new Error(json.error.message); }
+    const uid=json.localId;
     const {db,doc,setDoc}=window._fb;
-    const secondaryApp = initializeApp(window._fb.auth.app.options, 'sec-'+Date.now());
-    const secondaryAuth = getAuth2(secondaryApp);
-    const cred = await createUser2(secondaryAuth, email, senha);
-    const uid = cred.user.uid;
-    await secondaryAuth.signOut();
-    await secondaryApp.delete();
-    const id=nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'_');
-    await setDoc(doc(db,'alunos',id),{nome,email,uid});
-    document.getElementById('novo-nome').value=''; document.getElementById('novo-email').value=''; document.getElementById('novo-senha').value='';
-    await carregarAlunos(); renderAlunosList();
-    showToast('✓ Aluno cadastrado!');
-  } catch(e){
-    if(e.code==='auth/email-already-in-use') showToast('Email já cadastrado',true);
-    else showToast('Erro: '+e.message,true);
-    console.error(e);
-  }
-  btn.disabled=false; document.getElementById('label-criar-aluno').textContent='Criar conta do aluno';
-}
+    const id=nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9
 
 function renderAlunosList(){
   const el=document.getElementById('alunos-list');
