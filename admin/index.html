@@ -846,7 +846,7 @@ async function criarAluno(){
     if(json.error){ showToast('Erro: '+json.error.message,true); throw new Error(json.error.message); }
     const uid=json.localId;
     const {db,doc,setDoc}=window._fb;
-    const id=nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9
+    const id=nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_');
 
 function renderAlunosList(){
   const el=document.getElementById('alunos-list');
