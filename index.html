@@ -4,7 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="only light">
-  <title>Destrava Surf — Itacaré, BA</title>
+  <title>Aulas de Surf em Itacaré | Destrava Surf</title>
+  <meta name="description" content="Aulas de surf em Itacaré para todos os níveis. Aprenda e evolua com instrutores experientes, equipamentos, transporte e vídeo análise personalizada.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Aulas de Surf em Itacaré | Destrava Surf">
+  <meta property="og:description" content="Aulas de surf em Itacaré para iniciantes, intermediários e avançados. Evolua com acompanhamento personalizado.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.destravasurf.com.br/">
   <style>
     /* ── SELF-HOSTED FONTS ── */
     @font-face {
@@ -385,8 +391,10 @@ nav.scrolled .nav-aluno:hover {
       filter: sepia(0.08) saturate(0.9); display: block;
     }
     .aulas-grid {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
     }
+    .aulas-level-intro { max-width: 760px; margin: -28px 0 42px; font-size: 16px; line-height: 1.7; color: var(--cinza); font-weight: 300; }
+    .aulas-grid-levels { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .aula-item { padding-top: 20px; border-top: 1px solid rgba(46,42,38,0.1); }
     .aula-n {
       font-family: 'Space Mono', monospace; font-size: 9px;
@@ -569,7 +577,7 @@ nav.scrolled .nav-aluno:hover {
     }
     .dep-header .stars { color: #F9B233; font-size: 14px; letter-spacing: 2px; }
     .dep-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+      display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px;
     }
     .dep-card {
       background: white; border-radius: 4px;
@@ -900,29 +908,25 @@ nav.scrolled .nav-aluno:hover {
 <section id="aulas">
   <div class="aulas-top">
     <h2 class="section-h2" data-en="What you<br><em>learn</em><br>with us">O que você<br><em>aprende</em><br>com a gente</h2>
-    <p data-en="From balance on the board to reading the waves — we teach what really matters for you to truly evolve.">Do equilíbrio na prancha à leitura das ondas — ensinamos o que realmente importa pra você evoluir de verdade.</p>
+    <p data-en="Surf coaching for every stage — from your first waves to refining your technique and maneuvers.">Acompanhamento de surf em cada etapa — das primeiras ondas ao refinamento da técnica e das manobras.</p>
   </div>
-  <img class="aulas-foto" src="images/aulas.jpg" alt="Warm-up na areia — Destrava Surf">
-  <div class="aulas-grid">
+  <img class="aulas-foto" src="images/aulas.jpg" alt="Aquecimento na areia antes da aula de surf — Destrava Surf">
+  <p class="aulas-level-intro" data-en="Every session is adapted to your experience and goals. Video filming and personalized analysis are available at every level.">Cada aula é adaptada à sua experiência e aos seus objetivos. A filmagem e a vídeo análise personalizada estão disponíveis em todos os níveis.</p>
+  <div class="aulas-grid aulas-grid-levels">
     <div class="aula-item">
       <div class="aula-n">01 ——</div>
-      <h3 data-en="Position & Paddling">Posição & Remada</h3>
-      <p data-en="The foundation of everything. Correct position on the board and efficient paddling technique to catch waves.">A base de tudo. Posição correta na prancha e técnica de remada eficiente pra pegar as ondas.</p>
+      <h3 data-en="Beginner · Build your foundation">Iniciante · Construa sua base</h3>
+      <p data-en="Get comfortable in the ocean and learn the essentials: ocean safety, board positioning, paddling, timing and your first pop-up.">Ganhe confiança no mar e aprenda os fundamentos: segurança no oceano, posição na prancha, remada, tempo de onda e seus primeiros pop-ups.</p>
     </div>
     <div class="aula-item">
       <div class="aula-n">02 ——</div>
-      <h3 data-en="The Pop-Up">O Pop-Up</h3>
-      <p data-en="Getting up fast, fluid and at the right time. Practiced on land before hitting the water.">Levantar rápido, fluido e no tempo certo. Praticado em terra antes de entrar na água.</p>
+      <h3 data-en="Intermediate · Find your flow">Intermediário · Encontre seu ritmo</h3>
+      <p data-en="Improve wave selection, positioning and take-offs. Work on direction, speed generation and reading sections to make each ride more intentional.">Aprimore a escolha das ondas, o posicionamento e a entrada. Trabalhe direção, geração de velocidade e leitura das seções para surfar com mais intenção.</p>
     </div>
     <div class="aula-item">
       <div class="aula-n">03 ——</div>
-      <h3 data-en="Reading the Waves">Leitura das Ondas</h3>
-      <p data-en="Understanding the ocean is half of surfing. You learn to read the waves and position yourself in the outside.">Entender o mar é metade do surf. Você aprende a ler as ondas e se posicionar no outside.</p>
-    </div>
-    <div class="aula-item">
-      <div class="aula-n">04 ——</div>
-      <h3 data-en="Maneuvers & Progression">Manobras & Evolução</h3>
-      <p data-en="For those who already generate speed: techniques to learn cutbacks, snaps and carves. The goal is to nail a solid bottom turn and lip hit.">Para quem já pega velocidade: técnicas para aprender cutbacks, batidas e rasgadas. O objetivo é fazer um base lip bem feito.</p>
+      <h3 data-en="Advanced · Refine your maneuvers">Avançado · Refine suas manobras</h3>
+      <p data-en="For surfers already generating speed: refine bottom turns, cutbacks, snaps and carves, with technical feedback tailored to your surfing.">Para quem já gera velocidade: refine bottom turns, cutbacks, batidas e rasgadas, com feedback técnico direcionado ao seu surf.</p>
     </div>
   </div>
 </section>
@@ -1010,48 +1014,32 @@ nav.scrolled .nav-aluno:hover {
     <h2 class="section-h2" style="margin-bottom:0" data-en="What our<br><em>students say</em>">O que dizem<br><em>nossos alunos</em></h2>
     <div class="google-tag">
       <span class="stars">★★★★★</span>
-      5.0 · Google Reviews
+      <span data-en="Real Google reviews">Avaliações reais no Google</span>
     </div>
   </div>
   <div class="dep-grid">
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
-      <p class="dep-text" data-en="Destrava Surf brought me incredible days in Itacaré. Professor Salomão is the best instructor I've ever had — his teaching is impeccable and with him I finally unlocked my maneuvers. The filmed lessons are amazing, including drone footage that captures the stunning landscapes of Itacaré's beaches. The video analyses were extremely useful to see what I needed to improve for the next day's surf. Highly recommend and I will definitely come back for more lessons.">A Destrava Surf me trouxe dias incríveis em Itacaré, o professor Salomão é o melhor professor que eu já tive, a sua didática é impecável e com ele eu consegui, finalmente, destravar as minhas manobras. As aulas com filmagens são muito boas, inclusive com o drone que captura as paisagens lindas das praias de Itacaré. As video-análises foram extremamente úteis para ver o que eu precisava melhorar para o surfe do dia seguinte. Recomendo demais e com certeza voltarei para fazer mais aulas com eles.</p>
-      <p class="dep-note">Originally in Portuguese</p>
-      <div class="dep-autor">
-        <div class="dep-avatar">VM</div>
-        <div>
-          <div class="dep-nome">Vivian Morizono</div>
-          <div class="dep-local">São Paulo, SP</div>
-        </div>
-      </div>
+      <p class="dep-text" data-en="The lessons were very dynamic and well structured, always with warm-ups and exercises to improve our surfing. Another highlight was the personalized video analysis for each student.">As aulas foram muito dinâmicas e bem estruturadas, sempre com aquecimento e exercícios para melhorar nossa prática no surf. Outro diferencial foi a vídeo análise personalizada de cada aluno.</p>
+      <div class="dep-autor"><div class="dep-avatar">GG</div><div><div class="dep-nome">Giulia Nisius Gaspar</div><div class="dep-local" data-en="Google review · 5 stars">Avaliação no Google · 5 estrelas</div></div></div>
     </div>
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
-      <p class="dep-text" data-en="I've been taking surf lessons with DestravaSurf for 1 year, with the best instructor, Salomão! Everything I know about surfing I owe to this amazing person who has become a great friend! Come to Destrava 🙏🏻✨">Estou há 1 ano tendo aulas de surf com a DestravaSurf, com o melhor professor, Salomão! Tudo que sei no surf devo a essa grande pessoa que hoje se tornou um grande amigo! Vem pra destrava 🙏🏻✨</p>
-      <p class="dep-note">Originally in Portuguese</p>
-      <div class="dep-autor">
-        <div class="dep-avatar">LW</div>
-        <div>
-          <div class="dep-nome">Lucas Wolff</div>
-          <div class="dep-local">Florianópolis, SC</div>
-        </div>
-      </div>
+      <p class="dep-text" data-en="A professional team that takes care of and protects its students. They turn lessons into relaxed moments of learning and welcoming.">Uma equipe profissional, que cuida e protege seus alunos. Eles transformam os encontros e as aulas em momentos descontraídos, de aprendizado e acolhimento.</p>
+      <div class="dep-autor"><div class="dep-avatar">MM</div><div><div class="dep-nome">Marcus Manzolillo Horta Fernandes</div><div class="dep-local" data-en="Google review · 5 stars">Avaliação no Google · 5 estrelas</div></div></div>
     </div>
     <div class="dep-card">
       <div class="dep-stars">★★★★★</div>
-      <p class="dep-text" data-en="Some things that set Destrava apart: 1. Punctuality 2. Filming (makes a huge difference for progression) 3. Possibility to switch beaches 4. Has a car and can drive students. Plus guaranteed good vibes :)">Alguns diferenciais da Destrava: 1. Pontualidade 2. Filmagem (faz toda diferença pra evoluir) 3. Possibilidade de variar a praia 4. Tem carro e pode levar o aluno. Fora a resenha garantida :)</p>
-      <p class="dep-note">Originally in Portuguese</p>
-      <div class="dep-autor">
-        <div class="dep-avatar">EF</div>
-        <div>
-          <div class="dep-nome">Erika Fiuza</div>
-          <div class="dep-local">Belo Horizonte, MG</div>
-        </div>
-      </div>
+      <p class="dep-text" data-en="We are intermediate but on different levels and we both progressed and learnt new skills. Salo's video analysis was really helpful for getting individual advice.">Somos intermediários, mas em níveis diferentes, e ambos evoluímos e aprendemos novas habilidades. A vídeo análise do Salo ajudou muito a receber orientações individuais.</p>
+      <div class="dep-autor"><div class="dep-avatar">HG</div><div><div class="dep-nome">Hanna G.</div><div class="dep-local" data-en="Google review · 5 stars">Avaliação no Google · 5 estrelas</div></div></div>
+    </div>
+    <div class="dep-card">
+      <div class="dep-stars">★★★★★</div>
+      <p class="dep-text" data-en="The instructors listen, give excellent advice and know how to build confidence so you can progress while having a great time in the water.">Os instrutores escutam, dão ótimas dicas e sabem como transmitir confiança para você evoluir enquanto aproveita cada momento na água.</p>
+      <div class="dep-autor"><div class="dep-avatar">EO</div><div><div class="dep-nome">De Oliveira Eduardo</div><div class="dep-local" data-en="Google review · 5 stars">Avaliação no Google · 5 estrelas</div></div></div>
     </div>
   </div>
-  <p class="dep-cta" data-en="Want to see more reviews? <a href='https://share.google/WOsqaUYfDfMvtuEKR' target='_blank'>Visit our Google profile →</a>">Quer ver mais avaliações? <a href="https://share.google/WOsqaUYfDfMvtuEKR" target="_blank">Acesse nosso perfil no Google →</a></p>
+  <p class="dep-cta" data-en="Read all our reviews on Google: <a href='https://www.google.com/search?q=Destrava+Surf+%7C+Surf+School&amp;stick=H4sIAAAAAAAA_-NgU1I1qLAwS0w1srQ0TQMyjM2TUqwMKgxNjczNjRPTjFOSUpPMUkwWsUq7pBaXFCWWJSoElxalKdRAqODkjPz8HADrDWoSRwAAAA&amp;hl=pt-BR&amp;mat=CTpWJvrQLyLDElcBzAmVZtiZdFf1HQG7gCJVui403r8Zswy7uAdUE6upwTzOsg2XjHchNor4aZsKhniChJAf65mNFvEkpZ1ulsDaeXu5OPPRGAp1rtYk6hBgSM6L1DfT-Rc&amp;authuser=0&amp;ved=2ahUKEwi9tdT_-vGXAxXnpZUCHYfnJuoQ-MgIegQIRhAf#mpd=~14060853561200629306/customers/reviews' target='_blank' rel='noopener noreferrer'>See all Google reviews →</a>">Leia todas as nossas avaliações no Google: <a href="https://www.google.com/search?q=Destrava+Surf+%7C+Surf+School&amp;stick=H4sIAAAAAAAA_-NgU1I1qLAwS0w1srQ0TQMyjM2TUqwMKgxNjczNjRPTjFOSUpPMUkwWsUq7pBaXFCWWJSoElxalKdRAqODkjPz8HADrDWoSRwAAAA&amp;hl=pt-BR&amp;mat=CTpWJvrQLyLDElcBzAmVZtiZdFf1HQG7gCJVui403r8Zswy7uAdUE6upwTzOsg2XjHchNor4aZsKhniChJAf65mNFvEkpZ1ulsDaeXu5OPPRGAp1rtYk6hBgSM6L1DfT-Rc&amp;authuser=0&amp;ved=2ahUKEwi9tdT_-vGXAxXnpZUCHYfnJuoQ-MgIegQIRhAf#mpd=~14060853561200629306/customers/reviews" target="_blank" rel="noopener noreferrer">Ver todas as avaliações →</a></p>
 </section>
 
 <!-- ITACARÉ -->
