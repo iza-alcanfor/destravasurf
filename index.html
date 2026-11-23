@@ -1141,18 +1141,25 @@ nav.scrolled .nav-aluno:hover {
 </footer>
 
 <script>
-  // Track clicks that open WhatsApp (all wa.me links, including lesson and contact CTAs).
+  // Track WhatsApp CTA clicks. Capture phase + composedPath also handles clicks
+  // on nested elements inside the link; beacon transport helps preserve the hit
+  // while the browser opens the WhatsApp tab.
   document.addEventListener('click', (event) => {
-    const link = event.target.closest('a[href*="wa.me/"], a[href*="api.whatsapp.com/"]');
-    if (!link) return;
-    if (typeof window.gtag === 'function') {
-      window.gtag('event', 'whatsapp_click', {
-        link_url: link.href,
-        link_text: (link.innerText || link.getAttribute('aria-label') || '').trim(),
-        page_location: window.location.href
-      });
-    }
-  });
+    const path = typeof event.composedPath === 'function' ? event.composedPath() : [event.target];
+    const link = path.find((node) =>
+      node instanceof HTMLAnchorElement &&
+      (node.href.includes('wa.me/') || node.href.includes('api.whatsapp.com/'))
+    );
+    if (!link || typeof window.gtag !== 'function') return;
+
+    window.gtag('event', 'whatsapp_click', {
+      send_to: 'G-DLL9BJBRGE',
+      link_url: link.href,
+      link_text: (link.innerText || link.getAttribute('aria-label') || '').trim(),
+      page_location: window.location.href,
+      transport_type: 'beacon'
+    });
+  }, true);
 
   const nav = document.getElementById('nav');
   const logoImg = document.getElementById('nav-logo-img');
