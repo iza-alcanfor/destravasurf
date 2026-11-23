@@ -799,6 +799,14 @@ nav.scrolled .nav-aluno:hover {
       .g-item { height: 220px !important; grid-column: 1 !important; }
     }
   </style>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DLL9BJBRGE"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DLL9BJBRGE');
+  </script>
 </head>
 <body>
 
@@ -1133,6 +1141,19 @@ nav.scrolled .nav-aluno:hover {
 </footer>
 
 <script>
+  // Track clicks that open WhatsApp (all wa.me links, including lesson and contact CTAs).
+  document.addEventListener('click', (event) => {
+    const link = event.target.closest('a[href*="wa.me/"], a[href*="api.whatsapp.com/"]');
+    if (!link) return;
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', 'whatsapp_click', {
+        link_url: link.href,
+        link_text: (link.innerText || link.getAttribute('aria-label') || '').trim(),
+        page_location: window.location.href
+      });
+    }
+  });
+
   const nav = document.getElementById('nav');
   const logoImg = document.getElementById('nav-logo-img');
   const logoW = 'images/logo_white.png';
